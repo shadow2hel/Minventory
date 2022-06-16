@@ -1,0 +1,5 @@
+name: Minventory
+version: 0.1-DEV
+author: Shadow2hel
+main: me.shadow2hel.minventory.Minventory
+api-version: 1.19
