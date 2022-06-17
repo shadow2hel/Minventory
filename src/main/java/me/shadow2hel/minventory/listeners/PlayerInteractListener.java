@@ -1,6 +1,7 @@
 package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.constants.VALUABLES;
+import me.shadow2hel.minventory.data.managers.IPlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Allay;
@@ -11,6 +12,12 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class PlayerInteractListener implements Listener {
+    private final IPlayerManager playerManager;
+
+    public PlayerInteractListener(IPlayerManager playerManager) {
+        this.playerManager = playerManager;
+    }
+
     @EventHandler
     private void onEntityTouch(PlayerInteractEntityEvent touch) {
         Material itemInHand = touch.getPlayer().getInventory().getItemInMainHand().getType();
