@@ -64,6 +64,8 @@ public class SQLite extends Database {
         String SQLiteCreatePlayerTable = "CREATE TABLE IF NOT EXISTS minventory_players (" +
                 "`player` varchar(32) NOT NULL," +
                 "`enderchestwiped` varchar(5) NOT NULL," +
+                "`prestige` int(2) NOT NULL," +
+                "`markedforprestige` varchar(5) NOT NULL," +
                 "PRIMARY KEY (`player`)" +
                 ");";
 

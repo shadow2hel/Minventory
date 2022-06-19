@@ -30,11 +30,13 @@ public class PlayerRepo implements IPlayerRepo {
         try {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(
-                    String.format("INSERT OR IGNORE INTO %s(player,enderchestwiped) VALUES (?,?)",
+                    String.format("INSERT OR IGNORE INTO %s(player,enderchestwiped,prestige,markedforprestige) VALUES (?,?,?,?)",
                             table));
 
             ps.setString(1, player.getUUID());
             ps.setString(2, "" + player.isEnderChestWiped());
+            ps.setInt(3, 0);
+            ps.setString(4, "" + false);
             int rows = ps.executeUpdate();
             return rows > 0 ? player : null;
         } catch (SQLException sqlException) {
@@ -66,7 +68,9 @@ public class PlayerRepo implements IPlayerRepo {
             while(rs.next()) {
                 playerList.add(new ModelPlayer(
                         rs.getString(1),
-                        rs.getString(2).equals("true")));
+                        rs.getString(2).equals("true"),
+                        rs.getInt(3),
+                        rs.getString(4).equals("true")));
             }
             return playerList;
         } catch (SQLException sqlException) {
@@ -92,7 +96,9 @@ public class PlayerRepo implements IPlayerRepo {
             while(rs.next()) {
                 playerList.add(new ModelPlayer(
                         rs.getString(1),
-                        rs.getString(2).equals("true")));
+                        rs.getString(2).equals("true"),
+                        rs.getInt(3),
+                        rs.getString(4).equals("true")));
             }
             return playerList.size() > 0 ? playerList.get(0) : null;
         } catch (SQLException sqlException) {
@@ -118,7 +124,9 @@ public class PlayerRepo implements IPlayerRepo {
             while(rs.next()) {
                 playerList.add(new ModelPlayer(
                         rs.getString(1),
-                        rs.getString(2).equals("true")));
+                        rs.getString(2).equals("true"),
+                        rs.getInt(3),
+                        rs.getString(4).equals("true")));
             }
             return playerList.size() > 0 ? playerList.get(0) : null;
         } catch (SQLException sqlException) {
@@ -137,9 +145,11 @@ public class PlayerRepo implements IPlayerRepo {
         ResultSet rs = null;
         try {
             conn = db.getSQLConnection();
-            ps = conn.prepareStatement(String.format("UPDATE %s SET enderchestwiped = ? WHERE player = ?", table));
+            ps = conn.prepareStatement(String.format("UPDATE %s SET enderchestwiped = ?, prestige = ?, markedforprestige = ? WHERE player = ?", table));
             ps.setString(1, "" + player.isEnderChestWiped());
-            ps.setString(2, player.getUUID());
+            ps.setInt(2, player.getPrestige());
+            ps.setString(3, "" + player.isMarkedForPrestige());
+            ps.setString(4, "" + player.getUUID());
             int rows = ps.executeUpdate();
             return rows > 0 ? player: null;
 

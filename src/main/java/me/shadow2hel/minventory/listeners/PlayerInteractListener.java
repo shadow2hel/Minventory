@@ -4,12 +4,17 @@ import me.shadow2hel.minventory.constants.VALUABLES;
 import me.shadow2hel.minventory.data.managers.IMobManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
 import me.shadow2hel.minventory.model.MobWithItem;
+import me.shadow2hel.minventory.model.TouchedInventory;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
@@ -27,9 +32,6 @@ public class PlayerInteractListener implements Listener {
         Material itemInHand = touch.getPlayer().getInventory().getItemInMainHand().getType();
         if(touch.getRightClicked() instanceof Allay){
             if (!VALUABLES.GetAllBlacklist().contains(itemInHand)) {
-                Bukkit.broadcastMessage(String.format("%s just touched Allay %s!",
-                        touch.getPlayer().getName(),
-                        touch.getRightClicked().getUniqueId()));
                 mobManager.createMobWithItem(new MobWithItem(touch.getRightClicked().getUniqueId().toString(),
                         touch.getRightClicked().getCustomName() != null,
                         touch.getRightClicked().getType().toString(),
@@ -44,9 +46,6 @@ public class PlayerInteractListener implements Listener {
         }
         if(touch.getRightClicked() instanceof ItemFrame) {
             if (!VALUABLES.GetAllBlacklist().contains(itemInHand)){
-                Bukkit.broadcastMessage(String.format("%s just touched an Item Frame %s",
-                        touch.getPlayer().getName(),
-                        touch.getRightClicked().getUniqueId()));
                 //TODO LOG IN DATABASE
             } else {
                 touch.setCancelled(true);
@@ -57,12 +56,32 @@ public class PlayerInteractListener implements Listener {
     @EventHandler
     private void onArmorStandTouch(PlayerArmorStandManipulateEvent touch) {
         if (!VALUABLES.GetArmorWeaponsBlacklist().contains(touch.getPlayer().getInventory().getItemInMainHand().getType())){
-            Bukkit.broadcastMessage(String.format("%s just gave Armorstand %s %s", touch.getPlayer().getName(),
-                    touch.getRightClicked().getUniqueId(),
-                    touch.getPlayer().getInventory().getItemInMainHand().getType()));
+
             //TODO LOG IN DATABASE
         } else {
             touch.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    private void onDoublechestBreak(BlockBreakEvent blockBreakEvent) {
+        if (blockBreakEvent.getBlock().getState() instanceof DoubleChest doubleChest) {
+            for (int x = -1; x < 1; x++) {
+                for (int z = -1; z < 1; z++) {
+                    if (x != 0 && z != 0) {
+                       Block possibleBlock = doubleChest.getWorld().getBlockAt(doubleChest.getLocation().getBlockX() + x, doubleChest.getLocation().getBlockY(), doubleChest.getLocation().getBlockZ() + z);
+                       if (possibleBlock instanceof Chest leftoverDoublechest) {
+                           playerManager.createTouchedInventory(new TouchedInventory(
+                                   blockBreakEvent.getPlayer().getUniqueId().toString(),
+                                   leftoverDoublechest.getInventory().getType().toString(),
+                                   leftoverDoublechest.getLocation().getBlockX(),
+                                   leftoverDoublechest.getLocation().getBlockY(),
+                                   leftoverDoublechest.getLocation().getBlockZ(),
+                                   leftoverDoublechest.getWorld().getName()));
+                       }
+                    }
+                }
+            }
         }
     }
 }

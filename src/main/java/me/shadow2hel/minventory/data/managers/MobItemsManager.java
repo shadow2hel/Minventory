@@ -10,16 +10,33 @@ import java.util.List;
 
 public class MobItemsManager implements IMobManager {
     IMobWithItemRepo mobWithItemRepo;
+    JavaPlugin main;
 
-    public MobItemsManager(Database db, JavaPlugin main) {
-        this.mobWithItemRepo = new MobWithItemRepo(db, main);
+    public MobItemsManager(IMobWithItemRepo mobWithItemRepo, JavaPlugin main) {
+        this.mobWithItemRepo = mobWithItemRepo;
+        this.main = main;
     }
 
     public MobWithItem createMobWithItem(MobWithItem mobWithItem) {
+        MobWithItem newMobWithItem = mobWithItemRepo.createMobWithItem(mobWithItem);
+        if (newMobWithItem != null) {
+            main.getLogger().info(String.format("Registered %s picked up item at %s %s %s",
+                    newMobWithItem.getType(),
+                    newMobWithItem.getLocation_x(),
+                    newMobWithItem.getLocation_y(),
+                    newMobWithItem.getLocation_z()));
+            return newMobWithItem;
+        }
+        main.getLogger().info(String.format("Register %s picked up item at %s %s %s failed!",
+                mobWithItem.getType(),
+                mobWithItem.getLocation_x(),
+                mobWithItem.getLocation_y(),
+                mobWithItem.getLocation_z()));
         return mobWithItemRepo.createMobWithItem(mobWithItem);
     }
 
     public MobWithItem updateMobWithItem(MobWithItem mobWithItem) {
+        MobWithItem updatedMobWithItem = mobWithItemRepo.updateMobWithItem(mobWithItem);
         return mobWithItemRepo.updateMobWithItem(mobWithItem);
     }
 
@@ -36,6 +53,12 @@ public class MobItemsManager implements IMobManager {
     }
 
     public boolean deleteMobWithItem(MobWithItem mobWithItem) {
-        return mobWithItemRepo.deleteMobWithItem(mobWithItem);
+        boolean deleted = mobWithItemRepo.deleteMobWithItem(mobWithItem);
+        if (deleted) {
+            main.getLogger().info(String.format("Deleted %s %s", mobWithItem.getType(), mobWithItem.getUUID()));
+        } else {
+            main.getLogger().info(String.format("Delete %s %s failed!", mobWithItem.getType(), mobWithItem.getUUID()));
+        }
+        return deleted;
     }
 }

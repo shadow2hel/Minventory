@@ -19,10 +19,6 @@ public class MobPickupListener implements Listener {
     @EventHandler
     private void onMobPickupItem(EntityPickupItemEvent pickupItemEvent) {
         if (pickupItemEvent.getEntityType() != EntityType.PLAYER && VALUABLES.GetAllBlacklist().contains(pickupItemEvent.getItem().getItemStack().getType())) {
-            Bukkit.broadcastMessage(String.format("%s %s just picked up %s",
-                    pickupItemEvent.getEntityType(),
-                    pickupItemEvent.getEntity().getUniqueId(),
-                    pickupItemEvent.getItem().getItemStack().getType()));
             mobManager.createMobWithItem(new MobWithItem(
                     pickupItemEvent.getEntity().getUniqueId().toString(),
                     pickupItemEvent.getEntity().getCustomName() != null,

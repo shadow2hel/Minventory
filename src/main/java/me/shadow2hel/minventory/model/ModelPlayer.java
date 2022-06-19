@@ -3,10 +3,14 @@ package me.shadow2hel.minventory.model;
 public class ModelPlayer {
     private final String UUID;
     private boolean isEnderChestWiped;
+    private int prestige;
+    private boolean markedForPrestige;
 
-    public ModelPlayer(String UUID, boolean isEnderChestWiped) {
+    public ModelPlayer(String UUID, boolean isEnderChestWiped, int prestige, boolean markedForPrestige) {
         this.UUID = UUID;
         this.isEnderChestWiped = isEnderChestWiped;
+        this.prestige = prestige;
+        this.markedForPrestige = markedForPrestige;
     }
 
     public String getUUID() {
@@ -19,5 +23,21 @@ public class ModelPlayer {
 
     public void setEnderChestWiped(boolean enderChestWiped) {
         isEnderChestWiped = enderChestWiped;
+    }
+
+    public int getPrestige() {
+        return prestige;
+    }
+
+    public void setPrestige(int prestige) {
+        this.prestige = prestige;
+    }
+
+    public boolean isMarkedForPrestige() {
+        return markedForPrestige;
+    }
+
+    public void setMarkedForPrestige(boolean markedForPrestige) {
+        this.markedForPrestige = markedForPrestige;
     }
 }

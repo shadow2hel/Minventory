@@ -10,17 +10,47 @@ import java.util.List;
 
 public class PlayerInventoryManager implements IPlayerInventoryManager {
     IPlayerInventoryRepo playerInventoryRepo;
+    JavaPlugin main;
 
-    public PlayerInventoryManager(Database db, JavaPlugin main) {
-        this.playerInventoryRepo = new PlayerInventoryRepo(db, main);
+    public PlayerInventoryManager(IPlayerInventoryRepo playerInventoryRepo, JavaPlugin main) {
+        this.playerInventoryRepo = playerInventoryRepo;
+        this.main = main;
     }
 
     public TouchedInventory createTouchedInventory(TouchedInventory touchedInventory) {
-        return playerInventoryRepo.createPlayerInventory(touchedInventory);
+        TouchedInventory newTouchedInventory = playerInventoryRepo.createPlayerInventory(touchedInventory);
+        if(newTouchedInventory != null) {
+            main.getLogger().info(String.format("Registered %s at %s %s %s",
+                    newTouchedInventory.getType(),
+                    newTouchedInventory.getLocationX(),
+                    newTouchedInventory.getLocationY(),
+                    newTouchedInventory.getLocationZ()));
+            return newTouchedInventory;
+        }
+        main.getLogger().info(String.format("Register %s at %s %s %s failed!",
+                touchedInventory.getType(),
+                touchedInventory.getLocationX(),
+                touchedInventory.getLocationY(),
+                touchedInventory.getLocationZ()));
+        return null;
     }
 
     public TouchedInventory updateTouchedInventory(TouchedInventory touchedInventory) {
-        return playerInventoryRepo.updatePlayerInventory(touchedInventory);
+        TouchedInventory updatedInventory = playerInventoryRepo.updatePlayerInventory(touchedInventory);
+        if (updatedInventory != null) {
+            main.getLogger().info(String.format("Updated %s at %s %s %s",
+                    updatedInventory.getType(),
+                    updatedInventory.getLocationX(),
+                    updatedInventory.getLocationY(),
+                    updatedInventory.getLocationZ()));
+            return updatedInventory;
+        }
+        main.getLogger().info(String.format("Update %s at %s %s %s failed!",
+                touchedInventory.getType(),
+                touchedInventory.getLocationX(),
+                touchedInventory.getLocationY(),
+                touchedInventory.getLocationZ()));
+        return null;
     }
 
     public List<TouchedInventory> readAllTouchedInventory() {
@@ -36,6 +66,20 @@ public class PlayerInventoryManager implements IPlayerInventoryManager {
     }
 
     public boolean deleteTouchedInventory(TouchedInventory touchedInventory) {
-        return playerInventoryRepo.deletePlayerInventory(touchedInventory);
+        boolean deleted = playerInventoryRepo.deletePlayerInventory(touchedInventory);
+        if(deleted) {
+            main.getLogger().info(String.format("Deleted %s at %s %s %s",
+                    touchedInventory.getType(),
+                    touchedInventory.getLocationX(),
+                    touchedInventory.getLocationY(),
+                    touchedInventory.getLocationZ()));
+        } else {
+            main.getLogger().info(String.format("Delete %s at %s %s %s failed!",
+                    touchedInventory.getType(),
+                    touchedInventory.getLocationX(),
+                    touchedInventory.getLocationY(),
+                    touchedInventory.getLocationZ()));
+        }
+        return deleted;
     }
 }

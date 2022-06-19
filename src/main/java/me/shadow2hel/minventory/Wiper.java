@@ -36,12 +36,14 @@ public class Wiper {
 
     private List<Chunk> getNearbyChunks(World world, int location_x, int location_z) {
         List<Chunk> possibleChunks = new ArrayList<>();
-        Chunk currentChunk = world.getChunkAt(location_x / 16, location_z / 16);
-        int relativex = Math.abs(location_x % 16);
-        int relativey = Math.abs(location_z % 16);
+        Chunk currentChunk = world.getChunkAt((int) Math.floor((double)location_x / 16.0), (int) Math.floor((double)location_z / 16.0));
+        int relativex = location_x % 16;
+        int relativey = location_z % 16;
+        relativex = relativex < 0 ? 16 + relativex : relativex;
+        relativey = relativey < 0 ? 16 + relativey : relativey;
         if ((relativex >= 7 && relativex <= 9) &&
                 (relativey >= 7 && relativey <= 9)) {
-            possibleChunks.add(world.getChunkAt(location_x / 16, location_z / 16));
+            possibleChunks.add(currentChunk);
         } else {
             // Made by Sleepernl
             int xadd = relativex > 8 ? 1 : -1;
@@ -122,7 +124,7 @@ public class Wiper {
                 } else {
                     foundContainer.getInventory().clear();
                 }
-                main.getLogger().info(String.format("Wiped %s at %o %o %o",
+                main.getLogger().info(String.format("Wiped %s at %s %s %s",
                         container.getType(),
                         container.getLocationX(),
                         container.getLocationY(),
@@ -132,12 +134,14 @@ public class Wiper {
         }
     }
 
+
+
     private void wipeEnderchests() {
         List<ModelPlayer> players = playerManager.readAllPlayers();
-        players.forEach(player -> {
+        for(ModelPlayer player : players) {
             player.setEnderChestWiped(false);
-            playerManager.updatePlayer(player);
-        });
+            ModelPlayer updatedPlayer = playerManager.updatePlayer(player);
+        }
         main.getLogger().info("Enderchests are marked for wipe");
     }
 
