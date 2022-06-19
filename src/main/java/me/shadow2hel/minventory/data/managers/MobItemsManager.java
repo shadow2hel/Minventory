@@ -6,6 +6,8 @@ import me.shadow2hel.minventory.data.repositories.MobWithItemRepo;
 import me.shadow2hel.minventory.model.MobWithItem;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.List;
+
 public class MobItemsManager implements IMobManager {
     IMobWithItemRepo mobWithItemRepo;
 
@@ -19,6 +21,10 @@ public class MobItemsManager implements IMobManager {
 
     public MobWithItem updateMobWithItem(MobWithItem mobWithItem) {
         return mobWithItemRepo.updateMobWithItem(mobWithItem);
+    }
+
+    public List<MobWithItem> readAllMobWithItem() {
+        return mobWithItemRepo.readAllMobWithItem();
     }
 
     public MobWithItem readMobWithItem(String UUID) {

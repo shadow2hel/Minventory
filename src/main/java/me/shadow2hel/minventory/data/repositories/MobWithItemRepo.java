@@ -30,12 +30,16 @@ public class MobWithItemRepo implements IMobWithItemRepo {
         try {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(
-                    String.format("INSERT OR IGNORE INTO %s(mob,nametag,type) VALUES (?,?,?)",
+                    String.format("INSERT OR IGNORE INTO %s(mob,nametag,type,location_x,location_y,location_z,world) VALUES (?,?,?,?,?,?,?)",
                             table));
 
             ps.setString(1, mobWithItem.getUUID());
             ps.setString(2, "" + mobWithItem.hasName());
             ps.setString(3, "" + mobWithItem.getType());
+            ps.setInt(4, mobWithItem.getLocation_x());
+            ps.setInt(5, mobWithItem.getLocation_y());
+            ps.setInt(6, mobWithItem.getLocation_z());
+            ps.setString(7, mobWithItem.getWorld());
             int rows = ps.executeUpdate();
             return rows > 0 ? mobWithItem : null;
         } catch (SQLException sqlException) {
@@ -54,8 +58,38 @@ public class MobWithItemRepo implements IMobWithItemRepo {
         return null;
     }
 
+
+    public List<MobWithItem> readAllMobWithItem() {
+        Connection conn;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<MobWithItem> mobWithItems = new ArrayList<>();
+        try {
+            conn = db.getSQLConnection();
+            ps = conn.prepareStatement(String.format("SELECT * FROM %s", table));
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                mobWithItems.add(new MobWithItem(
+                        rs.getString(1),
+                        rs.getString(2).equalsIgnoreCase("true"),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getString(7)));
+            }
+            return mobWithItems;
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            db.close(ps, rs);
+        }
+
+        return null;
+    }
+
     public MobWithItem readMobWithItem(String UUID) {
-        Connection conn = null;
+        Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<MobWithItem> mobWithItems = new ArrayList<>();
@@ -65,11 +99,15 @@ public class MobWithItemRepo implements IMobWithItemRepo {
             ps.setString(1, UUID);
             rs = ps.executeQuery();
             List<TouchedInventory> touchedInventoryList = new ArrayList<>();
-            while(rs.next()) {
+            while (rs.next()) {
                 mobWithItems.add(new MobWithItem(
                         rs.getString(1),
                         rs.getString(2).equalsIgnoreCase("true"),
-                        rs.getString(3)));
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getString(7)));
             }
             return mobWithItems.size() > 0 ? mobWithItems.get(0) : null;
         } catch (SQLException sqlException) {
@@ -82,7 +120,7 @@ public class MobWithItemRepo implements IMobWithItemRepo {
     }
 
     public MobWithItem readMobWithItem(MobWithItem mobWithItem) {
-        Connection conn = null;
+        Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -91,33 +129,41 @@ public class MobWithItemRepo implements IMobWithItemRepo {
             ps.setString(1, mobWithItem.getUUID());
             rs = ps.executeQuery();
             List<MobWithItem> mobWithItems = new ArrayList<>();
-            while(rs.next()) {
+            while (rs.next()) {
                 mobWithItems.add(new MobWithItem(
                         rs.getString(1),
                         rs.getString(2).equalsIgnoreCase("true"),
-                        rs.getString(3)));
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6),
+                        rs.getString(7)));
             }
             return mobWithItems.size() > 0 ? mobWithItems.get(0) : null;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
-            db.close(ps,rs);
+            db.close(ps, rs);
         }
 
         return null;
     }
 
     public MobWithItem updateMobWithItem(MobWithItem mobWithItem) {
-        Connection conn = null;
+        Connection conn;
         PreparedStatement ps = null;
         try {
             conn = db.getSQLConnection();
-            ps = conn.prepareStatement(String.format("UPDATE %s SET type = ?, location_x = ?, location_y = ?, location_z = ? WHERE player = ?", table));
-            ps.setString(1, mobWithItem.getUUID());
-            ps.setString(2, "" + mobWithItem.hasName());
-            ps.setString(3, mobWithItem.getType());
+            ps = conn.prepareStatement(String.format("UPDATE %s SET nametag = ?, type = ?, location_x = ?, location_y = ?, location_z = ?, world = ? WHERE mob = ?", table));
+            ps.setString(1, "" + mobWithItem.hasName());
+            ps.setString(2, mobWithItem.getType());
+            ps.setInt(3, mobWithItem.getLocation_x());
+            ps.setInt(4, mobWithItem.getLocation_y());
+            ps.setInt(5, mobWithItem.getLocation_z());
+            ps.setString(6, mobWithItem.getWorld());
+            ps.setString(7, mobWithItem.getUUID());
             int rows = ps.executeUpdate();
-            return rows > 0 ? mobWithItem: null;
+            return rows > 0 ? mobWithItem : null;
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -129,19 +175,18 @@ public class MobWithItemRepo implements IMobWithItemRepo {
     }
 
     public boolean deleteMobWithItem(MobWithItem mobWithItem) {
-        Connection conn = null;
+        Connection conn;
         PreparedStatement ps = null;
-        ResultSet rs = null;
         try {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(String.format("DELETE FROM %s WHERE mob = ?", table));
             ps.setString(1, mobWithItem.getUUID());
             int rows = ps.executeUpdate();
             return rows > 0;
-        } catch(SQLException sqlException) {
+        } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
-            db.close(ps, rs);
+            db.close(ps, null);
         }
 
         return false;

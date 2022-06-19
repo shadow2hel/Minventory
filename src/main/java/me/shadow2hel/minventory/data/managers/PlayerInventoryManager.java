@@ -6,7 +6,9 @@ import me.shadow2hel.minventory.data.repositories.PlayerInventoryRepo;
 import me.shadow2hel.minventory.model.TouchedInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class PlayerInventoryManager implements IPlayerManager {
+import java.util.List;
+
+public class PlayerInventoryManager implements IPlayerInventoryManager {
     IPlayerInventoryRepo playerInventoryRepo;
 
     public PlayerInventoryManager(Database db, JavaPlugin main) {
@@ -19,6 +21,10 @@ public class PlayerInventoryManager implements IPlayerManager {
 
     public TouchedInventory updateTouchedInventory(TouchedInventory touchedInventory) {
         return playerInventoryRepo.updatePlayerInventory(touchedInventory);
+    }
+
+    public List<TouchedInventory> readAllTouchedInventory() {
+        return playerInventoryRepo.readAllPlayerInventory();
     }
 
     public TouchedInventory readTouchedInventory(String UUID) {

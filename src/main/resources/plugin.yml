@@ -3,3 +3,8 @@ version: 0.1.1-DEV
 author: Shadow2hel
 main: me.shadow2hel.minventory.Minventory
 api-version: 1.19
+commands:
+  wipe:
+    description: Does the wipe
+    usage: /<command>
+    permission: minventory.wipe

@@ -1,7 +1,9 @@
 package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.constants.VALUABLES;
-import me.shadow2hel.minventory.data.managers.IPlayerManager;
+import me.shadow2hel.minventory.data.managers.IMobManager;
+import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
+import me.shadow2hel.minventory.model.MobWithItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Allay;
@@ -12,10 +14,12 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class PlayerInteractListener implements Listener {
-    private final IPlayerManager playerManager;
+    private final IPlayerInventoryManager playerManager;
+    private final IMobManager mobManager;
 
-    public PlayerInteractListener(IPlayerManager playerManager) {
+    public PlayerInteractListener(IPlayerInventoryManager playerManager, IMobManager mobManager) {
         this.playerManager = playerManager;
+        this.mobManager = mobManager;
     }
 
     @EventHandler
@@ -26,7 +30,13 @@ public class PlayerInteractListener implements Listener {
                 Bukkit.broadcastMessage(String.format("%s just touched Allay %s!",
                         touch.getPlayer().getName(),
                         touch.getRightClicked().getUniqueId()));
-                //TODO LOG IN DATABASE
+                mobManager.createMobWithItem(new MobWithItem(touch.getRightClicked().getUniqueId().toString(),
+                        touch.getRightClicked().getCustomName() != null,
+                        touch.getRightClicked().getType().toString(),
+                        (int)touch.getRightClicked().getLocation().getX(),
+                        (int)touch.getRightClicked().getLocation().getY(),
+                        (int)touch.getRightClicked().getLocation().getZ(),
+                        touch.getRightClicked().getLocation().getWorld().getName()));
             } else {
                 touch.setCancelled(true);
             }

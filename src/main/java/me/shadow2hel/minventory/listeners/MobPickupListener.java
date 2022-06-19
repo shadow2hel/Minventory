@@ -2,6 +2,7 @@ package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.constants.VALUABLES;
 import me.shadow2hel.minventory.data.managers.IMobManager;
+import me.shadow2hel.minventory.model.MobWithItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -22,7 +23,14 @@ public class MobPickupListener implements Listener {
                     pickupItemEvent.getEntityType(),
                     pickupItemEvent.getEntity().getUniqueId(),
                     pickupItemEvent.getItem().getItemStack().getType()));
-            //TODO LOG IN DATABASE
+            mobManager.createMobWithItem(new MobWithItem(
+                    pickupItemEvent.getEntity().getUniqueId().toString(),
+                    pickupItemEvent.getEntity().getCustomName() != null,
+                    pickupItemEvent.getEntityType().toString(),
+                    (int)pickupItemEvent.getEntity().getLocation().getX(),
+                    (int)pickupItemEvent.getEntity().getLocation().getY(),
+                    (int)pickupItemEvent.getEntity().getLocation().getZ(),
+                    pickupItemEvent.getEntity().getLocation().getWorld().getName()));
         }
     }
 }

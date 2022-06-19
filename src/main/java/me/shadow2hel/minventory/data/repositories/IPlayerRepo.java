@@ -1,10 +1,10 @@
-package me.shadow2hel.minventory.data.managers;
+package me.shadow2hel.minventory.data.repositories;
 
 import me.shadow2hel.minventory.model.ModelPlayer;
 
 import java.util.List;
 
-public interface IPlayerManager {
+public interface IPlayerRepo {
     ModelPlayer createPlayer(ModelPlayer player);
     List<ModelPlayer> readAllPlayers();
     ModelPlayer readPlayer(String UUID);

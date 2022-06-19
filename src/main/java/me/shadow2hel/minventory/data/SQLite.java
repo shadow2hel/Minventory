@@ -46,14 +46,25 @@ public class SQLite extends Database {
                 "`location_x` int(32) NOT NULL," +
                 "`location_y` int(4) NOT NULL," +
                 "`location_z` int(32) NOT NULL," +
-                "PRIMARY KEY (`player`,`location_x`,`location_y`,`location_z`)" +
+                "`world` varchar(32) NOT NULL," +
+                "PRIMARY KEY (`player`,`location_x`,`location_y`,`location_z`,`world`)" +
                 ");";
 
         String SQLiteCreateMobTable = "CREATE TABLE IF NOT EXISTS minventory_mobs (" +
                 "`mob` varchar(32) NOT NULL," +
                 "`nametag` varchar(5) NOT NULL," +
                 "`type` varchar(16) NOT NULL," +
+                "`location_x` int(32) NOT NULL," +
+                "`location_y` int(32) NOT NULL," +
+                "`location_z` int(32) NOT NULL," +
+                "`world` varchar(32) NOT NULL," +
                 "PRIMARY KEY (`mob`)" +
+                ");";
+
+        String SQLiteCreatePlayerTable = "CREATE TABLE IF NOT EXISTS minventory_players (" +
+                "`player` varchar(32) NOT NULL," +
+                "`enderchestwiped` varchar(5) NOT NULL," +
+                "PRIMARY KEY (`player`)" +
                 ");";
 
         connection = getSQLConnection();
@@ -62,7 +73,8 @@ public class SQLite extends Database {
             s.executeUpdate(SQLiteCreateInventoryTable);
             s = connection.createStatement();
             s.executeUpdate(SQLiteCreateMobTable);
-            s.close();
+            s = connection.createStatement();
+            s.executeUpdate(SQLiteCreatePlayerTable);
         } catch (SQLException e) {
             e.printStackTrace();
         }

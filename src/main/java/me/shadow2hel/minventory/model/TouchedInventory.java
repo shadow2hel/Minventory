@@ -6,13 +6,15 @@ public class TouchedInventory {
     private final Integer locationX;
     private final Integer locationY;
     private final Integer locationZ;
+    private final String world;
 
-    public TouchedInventory(String UUID, String type, Integer locationX, Integer locationY, Integer locationZ) {
+    public TouchedInventory(String UUID, String type, Integer locationX, Integer locationY, Integer locationZ, String world) {
         this.UUID = UUID;
         this.type = type;
         this.locationX = locationX;
         this.locationY = locationY;
         this.locationZ = locationZ;
+        this.world = world;
     }
 
     public String getUUID() {
@@ -35,4 +37,7 @@ public class TouchedInventory {
         return locationZ;
     }
 
+    public String getWorld() {
+        return world;
+    }
 }
