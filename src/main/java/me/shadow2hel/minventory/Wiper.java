@@ -1,32 +1,33 @@
 package me.shadow2hel.minventory;
 
-import me.shadow2hel.minventory.data.managers.IMobManager;
+import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
 import me.shadow2hel.minventory.data.managers.IPlayerManager;
-import me.shadow2hel.minventory.model.MobWithItem;
-import me.shadow2hel.minventory.model.ModelPlayer;
-import me.shadow2hel.minventory.model.TouchedInventory;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.World;
+import me.shadow2hel.minventory.model.EntityItemTracker;
+import me.shadow2hel.minventory.model.PlayerTracker;
+import me.shadow2hel.minventory.model.InventoryTracker;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Wiper {
-    private final IMobManager mobManager;
+    private final IEntityManager mobManager;
     private final IPlayerInventoryManager playerInventoryManager;
     private final IPlayerManager playerManager;
     private final JavaPlugin main;
 
-    public Wiper(IMobManager mobManager, IPlayerInventoryManager playerInventoryManager, IPlayerManager playerManager, JavaPlugin main) {
+    public Wiper(IEntityManager mobManager, IPlayerInventoryManager playerInventoryManager, IPlayerManager playerManager, JavaPlugin main) {
         this.mobManager = mobManager;
         this.playerInventoryManager = playerInventoryManager;
         this.playerManager = playerManager;
@@ -36,7 +37,7 @@ public class Wiper {
 
     private List<Chunk> getNearbyChunks(World world, int location_x, int location_z) {
         List<Chunk> possibleChunks = new ArrayList<>();
-        Chunk currentChunk = world.getChunkAt((int) Math.floor((double)location_x / 16.0), (int) Math.floor((double)location_z / 16.0));
+        Chunk currentChunk = world.getChunkAt((int) Math.floor((double) location_x / 16.0), (int) Math.floor((double) location_z / 16.0));
         int relativex = location_x % 16;
         int relativey = location_z % 16;
         relativex = relativex < 0 ? 16 + relativex : relativex;
@@ -59,24 +60,34 @@ public class Wiper {
 
     private void trackEntities() {
         BukkitScheduler scheduler = Bukkit.getScheduler();
+        NamespacedKey key = new NamespacedKey(main, "minv_uuid");
         scheduler.runTaskTimer(main, () -> {
-            List<MobWithItem> dataMobs = mobManager.readAllMobWithItem();
+            List<EntityItemTracker> dataMobs = mobManager.readAllMobWithItem();
             if (dataMobs.size() > 0) {
-                for (MobWithItem dataMob : dataMobs) {
+                for (EntityItemTracker dataMob : dataMobs) {
                     World world = Bukkit.getWorld(dataMob.getWorld());
                     assert world != null;
                     List<Chunk> possibleChunks = getNearbyChunks(world, dataMob.getLocation_x(), dataMob.getLocation_z());
                     Entity foundEntity = possibleChunks
                             .stream()
                             .flatMap(chunk -> Arrays.stream(chunk.getEntities()))
-                            .filter(entity -> entity.getUniqueId().toString().equals(dataMob.getUUID()))
+                            .filter(entity -> {
+                                if (entity instanceof Item itemEntity) {
+                                    PersistentDataContainer nbt = itemEntity.getPersistentDataContainer();
+                                    if (nbt.has(key, PersistentDataType.STRING)) {
+                                        String uuid = nbt.get(key, PersistentDataType.STRING);
+                                        return uuid != null && uuid.equals(dataMob.getUUID());
+                                    }
+                                }
+                                return entity.getUniqueId().toString().equals(dataMob.getUUID());
+                            })
                             .findAny()
                             .orElse(null);
                     if (foundEntity == null) {
                         mobManager.deleteMobWithItem(dataMob);
                     } else {
-                        MobWithItem updatedMob = new MobWithItem(
-                                foundEntity.getUniqueId().toString(),
+                        EntityItemTracker updatedMob = new EntityItemTracker(
+                                dataMob.getUUID(),
                                 foundEntity.getCustomName() != null,
                                 foundEntity.getType().toString(),
                                 (int) foundEntity.getLocation().getX(),
@@ -99,24 +110,28 @@ public class Wiper {
     }
 
     private void wipeEntities() {
-        List<MobWithItem> mobs = mobManager.readAllMobWithItem();
-        for (MobWithItem mob :
+        List<EntityItemTracker> mobs = mobManager.readAllMobWithItem();
+        NamespacedKey key = new NamespacedKey(main, "minv_uuid");
+        for (EntityItemTracker mob :
                 mobs) {
             Objects.requireNonNull(Bukkit.getWorld(mob.getWorld())).getChunkAt(mob.getLocation_x() / 16, mob.getLocation_z() / 16);
-            Entity entity = getEntity(mob.getUUID());
+            Entity entity = getEntity(mob);
             if (entity != null) {
-                InventoryHolder realMob = (InventoryHolder) entity;
-                realMob.getInventory().clear();
-                main.getLogger().info(String.format("Wiped %s %s", mob.getType(), mob.getUUID()));
+                if (entity instanceof Item itemEntity) {
+                    itemEntity.remove();
+                } else {
+                    InventoryHolder realMob = (InventoryHolder) entity;
+                    realMob.getInventory().clear();
+                }
             }
             mobManager.deleteMobWithItem(mob);
         }
     }
 
     private void wipeContainers() {
-        List<TouchedInventory> containers = playerInventoryManager.readAllTouchedInventory();
-        for (TouchedInventory container : containers) {
-            Objects.requireNonNull(Bukkit.getWorld(container.getWorld())).getChunkAt(container.getLocationX() / 16, container.getLocationZ() /16);
+        List<InventoryTracker> containers = playerInventoryManager.readAllTouchedInventory();
+        for (InventoryTracker container : containers) {
+            Objects.requireNonNull(Bukkit.getWorld(container.getWorld())).getChunkAt(container.getLocationX() / 16, container.getLocationZ() / 16);
             InventoryHolder foundContainer = getContainer(Objects.requireNonNull(Bukkit.getWorld(container.getWorld())), container.getLocationX(), container.getLocationY(), container.getLocationZ());
             if (foundContainer != null) {
                 if (foundContainer instanceof Furnace furnaceContainer) {
@@ -135,26 +150,45 @@ public class Wiper {
     }
 
 
-
     private void wipeEnderchests() {
-        List<ModelPlayer> players = playerManager.readAllPlayers();
-        for(ModelPlayer player : players) {
+        List<PlayerTracker> players = playerManager.readAllPlayers();
+        for (PlayerTracker player : players) {
             player.setEnderChestWiped(false);
-            ModelPlayer updatedPlayer = playerManager.updatePlayer(player);
+            PlayerTracker updatedPlayer = playerManager.updatePlayer(player);
         }
         main.getLogger().info("Enderchests are marked for wipe");
     }
 
     public void wipeEnderchest(Player player) {
         player.getEnderChest().clear();
-        ModelPlayer dataPlayer = playerManager.readPlayer(player.getUniqueId().toString());
+        PlayerTracker dataPlayer = playerManager.readPlayer(player.getUniqueId().toString());
         dataPlayer.setEnderChestWiped(true);
         playerManager.updatePlayer(dataPlayer);
         main.getLogger().info(String.format("%s their Ender Chest has been wiped.", player.getName()));
     }
 
-    private Entity getEntity(String UUID) {
-        return Bukkit.getEntity(java.util.UUID.fromString(UUID));
+    private Entity getEntity(EntityItemTracker entity) {
+        World currentWorld = Bukkit.getWorld(entity.getWorld());
+        NamespacedKey key = new NamespacedKey(main, "minv_uuid");
+        if (currentWorld != null && entity.getType().equalsIgnoreCase("dropped_item")) {
+            Collection<Entity> items = currentWorld.getNearbyEntities(new Location(currentWorld,
+                    entity.getLocation_x(),
+                    entity.getLocation_y(),
+                    entity.getLocation_z()), 2, 2, 2, (filterEntity) -> filterEntity.getType() == EntityType.DROPPED_ITEM);
+            for (Entity item : items) {
+                PersistentDataContainer nbt = item.getPersistentDataContainer();
+                if (nbt.has(key, PersistentDataType.STRING)) {
+                    String uuid = nbt.get(key, PersistentDataType.STRING);
+                    if (uuid != null) {
+                        if (uuid.equals(entity.getUUID())) {
+                            return item;
+                        }
+                    }
+                    return null;
+                }
+            }
+        }
+        return Bukkit.getEntity(java.util.UUID.fromString(entity.getUUID()));
     }
 
     private InventoryHolder getContainer(World world, int location_x, int location_y, int location_z) {

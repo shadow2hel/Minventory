@@ -1,7 +1,7 @@
 package me.shadow2hel.minventory.data.managers;
 
 import me.shadow2hel.minventory.data.repositories.IPlayerRepo;
-import me.shadow2hel.minventory.model.ModelPlayer;
+import me.shadow2hel.minventory.model.PlayerTracker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -16,9 +16,9 @@ public class PlayerManager implements IPlayerManager {
     }
 
     @Override
-    public ModelPlayer createPlayer(ModelPlayer player) {
+    public PlayerTracker createPlayer(PlayerTracker player) {
 
-        ModelPlayer newPlayer = playerRepo.createPlayer(player);
+        PlayerTracker newPlayer = playerRepo.createPlayer(player);
         if (newPlayer != null) {
             main.getLogger().info(String.format("Registered Player %s", newPlayer.getUUID()));
             return newPlayer;
@@ -28,24 +28,24 @@ public class PlayerManager implements IPlayerManager {
     }
 
     @Override
-    public List<ModelPlayer> readAllPlayers() {
+    public List<PlayerTracker> readAllPlayers() {
         return playerRepo.readAllPlayers();
     }
 
     @Override
-    public ModelPlayer readPlayer(String UUID) {
+    public PlayerTracker readPlayer(String UUID) {
         return playerRepo.readPlayer(UUID);
     }
 
     @Override
-    public ModelPlayer readPlayer(ModelPlayer player) {
+    public PlayerTracker readPlayer(PlayerTracker player) {
         return playerRepo.readPlayer(player);
     }
 
     @Override
-    public ModelPlayer updatePlayer(ModelPlayer player) {
+    public PlayerTracker updatePlayer(PlayerTracker player) {
 
-        ModelPlayer updatedPlayer = playerRepo.updatePlayer(player);
+        PlayerTracker updatedPlayer = playerRepo.updatePlayer(player);
         if (updatedPlayer != null) {
             main.getLogger().info("Updated Player " + updatedPlayer.getUUID());
             return updatedPlayer;
@@ -55,7 +55,7 @@ public class PlayerManager implements IPlayerManager {
     }
 
     @Override
-    public boolean deletePlayer(ModelPlayer player) {
+    public boolean deletePlayer(PlayerTracker player) {
         boolean deleted = playerRepo.deletePlayer(player);
         if (deleted) {
             main.getLogger().info("Deleted Player " + player.getUUID());

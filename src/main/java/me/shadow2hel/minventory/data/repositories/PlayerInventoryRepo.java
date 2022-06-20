@@ -2,7 +2,7 @@ package me.shadow2hel.minventory.data.repositories;
 
 import me.shadow2hel.minventory.data.Database;
 import me.shadow2hel.minventory.data.Errors;
-import me.shadow2hel.minventory.model.TouchedInventory;
+import me.shadow2hel.minventory.model.InventoryTracker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
         this.main = main;
     }
 
-    public TouchedInventory createPlayerInventory(TouchedInventory touchedInventory) {
+    public InventoryTracker createPlayerInventory(InventoryTracker inventoryTracker) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -32,14 +32,14 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
                     String.format("INSERT OR IGNORE INTO %s(player,type,location_x,location_y,location_z,world) VALUES (?,?,?,?,?,?)",
                             table));
 
-            ps.setString(1, touchedInventory.getUUID());
-            ps.setString(2, touchedInventory.getType());
-            ps.setInt(3, touchedInventory.getLocationX());
-            ps.setInt(4, touchedInventory.getLocationY());
-            ps.setInt(5, touchedInventory.getLocationZ());
-            ps.setString(6, touchedInventory.getWorld());
+            ps.setString(1, inventoryTracker.getUUID());
+            ps.setString(2, inventoryTracker.getType());
+            ps.setInt(3, inventoryTracker.getLocationX());
+            ps.setInt(4, inventoryTracker.getLocationY());
+            ps.setInt(5, inventoryTracker.getLocationZ());
+            ps.setString(6, inventoryTracker.getWorld());
             int rows = ps.executeUpdate();
-            return rows > 0 ? touchedInventory : null;
+            return rows > 0 ? inventoryTracker : null;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
@@ -56,7 +56,7 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
         return null;
     }
 
-    public List<TouchedInventory> readAllPlayerInventory() {
+    public List<InventoryTracker> readAllPlayerInventory() {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -64,9 +64,9 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(String.format("SELECT * FROM %s ORDER BY location_x, location_z, world", table));
             rs = ps.executeQuery();
-            List<TouchedInventory> touchedInventoryList = new ArrayList<>();
+            List<InventoryTracker> inventoryTrackerList = new ArrayList<>();
             while(rs.next()) {
-                touchedInventoryList.add(new TouchedInventory(
+                inventoryTrackerList.add(new InventoryTracker(
                         rs.getString(1),
                         rs.getString(2),
                         rs.getInt(3),
@@ -74,7 +74,7 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
                         rs.getInt(5),
                         rs.getString(6)));
             }
-            return touchedInventoryList;
+            return inventoryTrackerList;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
@@ -84,7 +84,7 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
         return null;
     }
 
-    public TouchedInventory readPlayerInventory(String UUID) {
+    public InventoryTracker readPlayerInventory(String UUID) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -93,16 +93,16 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
             ps = conn.prepareStatement(String.format("SELECT * FROM %s WHERE player = ? ORDER BY location_x, location_z, world", table));
             ps.setString(1, UUID);
             rs = ps.executeQuery();
-            List<TouchedInventory> touchedInventoryList = new ArrayList<>();
+            List<InventoryTracker> inventoryTrackerList = new ArrayList<>();
             while(rs.next()) {
-                touchedInventoryList.add(new TouchedInventory(
+                inventoryTrackerList.add(new InventoryTracker(
                         rs.getString(1),
                         rs.getString(2), rs.getInt(3),
                         rs.getInt(4),
                         rs.getInt(5),
                         rs.getString(6)));
             }
-            return touchedInventoryList.size() > 0 ? touchedInventoryList.get(0) : null;
+            return inventoryTrackerList.size() > 0 ? inventoryTrackerList.get(0) : null;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
@@ -112,25 +112,25 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
         return null;
     }
 
-    public TouchedInventory readPlayerInventory(TouchedInventory touchedInventory) {
+    public InventoryTracker readPlayerInventory(InventoryTracker inventoryTracker) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(String.format("SELECT * FROM %s WHERE player = ? ORDER BY location_x, location_z, world", table));
-            ps.setString(1, touchedInventory.getUUID());
+            ps.setString(1, inventoryTracker.getUUID());
             rs = ps.executeQuery();
-            List<TouchedInventory> touchedInventoryList = new ArrayList<>();
+            List<InventoryTracker> inventoryTrackerList = new ArrayList<>();
             while(rs.next()) {
-                touchedInventoryList.add(new TouchedInventory(
+                inventoryTrackerList.add(new InventoryTracker(
                         rs.getString(1),
                         rs.getString(2), rs.getInt(3),
                         rs.getInt(4),
                         rs.getInt(5),
                         rs.getString(6)));
             }
-            return touchedInventoryList.size() > 0 ? touchedInventoryList.get(0) : null;
+            return inventoryTrackerList.size() > 0 ? inventoryTrackerList.get(0) : null;
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         } finally {
@@ -140,21 +140,21 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
         return null;
     }
 
-    public TouchedInventory updatePlayerInventory(TouchedInventory touchedInventory) {
+    public InventoryTracker updatePlayerInventory(InventoryTracker inventoryTracker) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(String.format("UPDATE %s SET type = ?, location_x = ?, location_y = ?, location_z = ?, world = ? WHERE player = ?", table));
-            ps.setString(1, touchedInventory.getType());
-            ps.setInt(2, touchedInventory.getLocationX());
-            ps.setInt(3, touchedInventory.getLocationY());
-            ps.setInt(4, touchedInventory.getLocationZ());
-            ps.setString(5, touchedInventory.getWorld());
-            ps.setString(6, touchedInventory.getUUID());
+            ps.setString(1, inventoryTracker.getType());
+            ps.setInt(2, inventoryTracker.getLocationX());
+            ps.setInt(3, inventoryTracker.getLocationY());
+            ps.setInt(4, inventoryTracker.getLocationZ());
+            ps.setString(5, inventoryTracker.getWorld());
+            ps.setString(6, inventoryTracker.getUUID());
             int rows = ps.executeUpdate();
-            return rows > 0 ? touchedInventory: null;
+            return rows > 0 ? inventoryTracker : null;
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -165,18 +165,18 @@ public class PlayerInventoryRepo implements IPlayerInventoryRepo {
         return null;
     }
 
-    public boolean deletePlayerInventory(TouchedInventory touchedInventory) {
+    public boolean deletePlayerInventory(InventoryTracker inventoryTracker) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(String.format("DELETE FROM %s WHERE player = ? AND location_x = ? AND location_y = ? AND location_z = ? AND world = ?", table));
-            ps.setString(1, touchedInventory.getUUID());
-            ps.setInt(2,touchedInventory.getLocationX());
-            ps.setInt(3,touchedInventory.getLocationY());
-            ps.setInt(4,touchedInventory.getLocationZ());
-            ps.setString(5,touchedInventory.getWorld());
+            ps.setString(1, inventoryTracker.getUUID());
+            ps.setInt(2, inventoryTracker.getLocationX());
+            ps.setInt(3, inventoryTracker.getLocationY());
+            ps.setInt(4, inventoryTracker.getLocationZ());
+            ps.setString(5, inventoryTracker.getWorld());
             int rows = ps.executeUpdate();
             return rows > 0;
         } catch(SQLException sqlException) {

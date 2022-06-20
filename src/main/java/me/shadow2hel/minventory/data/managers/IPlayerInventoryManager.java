@@ -1,15 +1,15 @@
 package me.shadow2hel.minventory.data.managers;
 
-import me.shadow2hel.minventory.model.TouchedInventory;
+import me.shadow2hel.minventory.model.InventoryTracker;
 
 import java.util.List;
 
 public interface IPlayerInventoryManager {
-    TouchedInventory createTouchedInventory(TouchedInventory touchedInventory);
+    InventoryTracker createTouchedInventory(InventoryTracker inventoryTracker);
 
-    TouchedInventory updateTouchedInventory(TouchedInventory touchedInventory);
-    List<TouchedInventory> readAllTouchedInventory();
-    TouchedInventory readTouchedInventory(String UUID);
-    TouchedInventory readTouchedInventory(TouchedInventory touchedInventory);
-    boolean deleteTouchedInventory(TouchedInventory touchedInventory);
+    InventoryTracker updateTouchedInventory(InventoryTracker inventoryTracker);
+    List<InventoryTracker> readAllTouchedInventory();
+    InventoryTracker readTouchedInventory(String UUID);
+    InventoryTracker readTouchedInventory(InventoryTracker inventoryTracker);
+    boolean deleteTouchedInventory(InventoryTracker inventoryTracker);
 }

@@ -1,25 +1,24 @@
 package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.constants.VALUABLES;
-import me.shadow2hel.minventory.data.managers.IMobManager;
-import me.shadow2hel.minventory.model.MobWithItem;
-import org.bukkit.Bukkit;
+import me.shadow2hel.minventory.data.managers.IEntityManager;
+import me.shadow2hel.minventory.model.EntityItemTracker;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 
 public class MobPickupListener implements Listener {
-    private final IMobManager mobManager;
+    private final IEntityManager mobManager;
 
-    public MobPickupListener(IMobManager mobManager) {
+    public MobPickupListener(IEntityManager mobManager) {
         this.mobManager = mobManager;
     }
 
     @EventHandler
     private void onMobPickupItem(EntityPickupItemEvent pickupItemEvent) {
         if (pickupItemEvent.getEntityType() != EntityType.PLAYER && VALUABLES.GetAllBlacklist().contains(pickupItemEvent.getItem().getItemStack().getType())) {
-            mobManager.createMobWithItem(new MobWithItem(
+            mobManager.createMobWithItem(new EntityItemTracker(
                     pickupItemEvent.getEntity().getUniqueId().toString(),
                     pickupItemEvent.getEntity().getCustomName() != null,
                     pickupItemEvent.getEntityType().toString(),

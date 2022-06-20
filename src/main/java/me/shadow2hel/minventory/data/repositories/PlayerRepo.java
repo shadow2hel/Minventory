@@ -2,7 +2,7 @@ package me.shadow2hel.minventory.data.repositories;
 
 import me.shadow2hel.minventory.data.Database;
 import me.shadow2hel.minventory.data.Errors;
-import me.shadow2hel.minventory.model.ModelPlayer;
+import me.shadow2hel.minventory.model.PlayerTracker;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
@@ -24,7 +24,7 @@ public class PlayerRepo implements IPlayerRepo {
     }
 
     @Override
-    public ModelPlayer createPlayer(ModelPlayer player) {
+    public PlayerTracker createPlayer(PlayerTracker player) {
         Connection conn = null;
         PreparedStatement ps = null;
         try {
@@ -56,7 +56,7 @@ public class PlayerRepo implements IPlayerRepo {
     }
 
     @Override
-    public List<ModelPlayer> readAllPlayers() {
+    public List<PlayerTracker> readAllPlayers() {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -64,9 +64,9 @@ public class PlayerRepo implements IPlayerRepo {
             conn = db.getSQLConnection();
             ps = conn.prepareStatement(String.format("SELECT * FROM %s", table));
             rs = ps.executeQuery();
-            List<ModelPlayer> playerList = new ArrayList<>();
+            List<PlayerTracker> playerList = new ArrayList<>();
             while(rs.next()) {
-                playerList.add(new ModelPlayer(
+                playerList.add(new PlayerTracker(
                         rs.getString(1),
                         rs.getString(2).equals("true"),
                         rs.getInt(3),
@@ -83,7 +83,7 @@ public class PlayerRepo implements IPlayerRepo {
     }
 
     @Override
-    public ModelPlayer readPlayer(String UUID) {
+    public PlayerTracker readPlayer(String UUID) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -92,9 +92,9 @@ public class PlayerRepo implements IPlayerRepo {
             ps = conn.prepareStatement(String.format("SELECT * FROM %s WHERE player = ?", table));
             ps.setString(1, UUID);
             rs = ps.executeQuery();
-            List<ModelPlayer> playerList = new ArrayList<>();
+            List<PlayerTracker> playerList = new ArrayList<>();
             while(rs.next()) {
-                playerList.add(new ModelPlayer(
+                playerList.add(new PlayerTracker(
                         rs.getString(1),
                         rs.getString(2).equals("true"),
                         rs.getInt(3),
@@ -111,7 +111,7 @@ public class PlayerRepo implements IPlayerRepo {
     }
 
     @Override
-    public ModelPlayer readPlayer(ModelPlayer player) {
+    public PlayerTracker readPlayer(PlayerTracker player) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -120,9 +120,9 @@ public class PlayerRepo implements IPlayerRepo {
             ps = conn.prepareStatement(String.format("SELECT * FROM %s WHERE player = ?", table));
             ps.setString(1, player.getUUID());
             rs = ps.executeQuery();
-            List<ModelPlayer> playerList = new ArrayList<>();
+            List<PlayerTracker> playerList = new ArrayList<>();
             while(rs.next()) {
-                playerList.add(new ModelPlayer(
+                playerList.add(new PlayerTracker(
                         rs.getString(1),
                         rs.getString(2).equals("true"),
                         rs.getInt(3),
@@ -139,7 +139,7 @@ public class PlayerRepo implements IPlayerRepo {
     }
 
     @Override
-    public ModelPlayer updatePlayer(ModelPlayer player) {
+    public PlayerTracker updatePlayer(PlayerTracker player) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -163,7 +163,7 @@ public class PlayerRepo implements IPlayerRepo {
     }
 
     @Override
-    public boolean deletePlayer(ModelPlayer player) {
+    public boolean deletePlayer(PlayerTracker player) {
         Connection conn;
         PreparedStatement ps = null;
         ResultSet rs = null;

@@ -1,12 +1,12 @@
 package me.shadow2hel.minventory.model;
 
-public class ModelPlayer {
+public class PlayerTracker {
     private final String UUID;
     private boolean isEnderChestWiped;
     private int prestige;
     private boolean markedForPrestige;
 
-    public ModelPlayer(String UUID, boolean isEnderChestWiped, int prestige, boolean markedForPrestige) {
+    public PlayerTracker(String UUID, boolean isEnderChestWiped, int prestige, boolean markedForPrestige) {
         this.UUID = UUID;
         this.isEnderChestWiped = isEnderChestWiped;
         this.prestige = prestige;

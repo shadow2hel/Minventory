@@ -4,23 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Wipe mechanics done">
+    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Almost all of hopper tracking done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvReset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvReset.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/SQLite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/SQLite.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/MobItemsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/MobItemsManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IMobManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IEntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IPlayerInventoryManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IPlayerInventoryManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IPlayerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IPlayerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/MobItemsManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/EntityItemsManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/PlayerInventoryManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/PlayerInventoryManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/PlayerManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/PlayerManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IMobWithItemRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IEntityRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IPlayerInventoryRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IPlayerInventoryRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IPlayerRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IPlayerRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/MobWithItemRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/EntityRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/PlayerInventoryRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/PlayerInventoryRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/PlayerRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/PlayerRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryOpenListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPickupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPickupListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPortalListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPortalListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerInteractListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerInteractListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerJoinListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerJoinListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/ModelPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/ModelPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/MobWithItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/EntityItemTracker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/ModelPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/PlayerTracker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/TouchedInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/model/InventoryTracker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +200,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655666581367</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Almost all of hopper tracking done">
+      <created>1655681308889</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1655681308889</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -211,6 +225,7 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Logging of chests and chestholders done" />
     <MESSAGE value="Wipe mechanics done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Wipe mechanics done" />
+    <MESSAGE value="Almost all of hopper tracking done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Almost all of hopper tracking done" />
   </component>
 </project>

@@ -1,30 +1,37 @@
 package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.constants.VALUABLES;
-import me.shadow2hel.minventory.data.managers.IMobManager;
+import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
-import me.shadow2hel.minventory.model.MobWithItem;
-import me.shadow2hel.minventory.model.TouchedInventory;
-import org.bukkit.Bukkit;
+import me.shadow2hel.minventory.model.EntityItemTracker;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Allay;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import java.util.UUID;
 
 public class PlayerInteractListener implements Listener {
     private final IPlayerInventoryManager playerManager;
-    private final IMobManager mobManager;
+    private final IEntityManager entityManager;
+    private final JavaPlugin main;
 
-    public PlayerInteractListener(IPlayerInventoryManager playerManager, IMobManager mobManager) {
+    public PlayerInteractListener(IPlayerInventoryManager playerManager, IEntityManager entityManager, JavaPlugin main) {
         this.playerManager = playerManager;
-        this.mobManager = mobManager;
+        this.entityManager = entityManager;
+        this.main = main;
     }
 
     @EventHandler
@@ -32,7 +39,7 @@ public class PlayerInteractListener implements Listener {
         Material itemInHand = touch.getPlayer().getInventory().getItemInMainHand().getType();
         if(touch.getRightClicked() instanceof Allay){
             if (!VALUABLES.GetAllBlacklist().contains(itemInHand)) {
-                mobManager.createMobWithItem(new MobWithItem(touch.getRightClicked().getUniqueId().toString(),
+                entityManager.createMobWithItem(new EntityItemTracker(touch.getRightClicked().getUniqueId().toString(),
                         touch.getRightClicked().getCustomName() != null,
                         touch.getRightClicked().getType().toString(),
                         (int)touch.getRightClicked().getLocation().getX(),
@@ -64,24 +71,22 @@ public class PlayerInteractListener implements Listener {
     }
 
     @EventHandler
-    private void onDoublechestBreak(BlockBreakEvent blockBreakEvent) {
-        if (blockBreakEvent.getBlock().getState() instanceof DoubleChest doubleChest) {
-            for (int x = -1; x < 1; x++) {
-                for (int z = -1; z < 1; z++) {
-                    if (x != 0 && z != 0) {
-                       Block possibleBlock = doubleChest.getWorld().getBlockAt(doubleChest.getLocation().getBlockX() + x, doubleChest.getLocation().getBlockY(), doubleChest.getLocation().getBlockZ() + z);
-                       if (possibleBlock instanceof Chest leftoverDoublechest) {
-                           playerManager.createTouchedInventory(new TouchedInventory(
-                                   blockBreakEvent.getPlayer().getUniqueId().toString(),
-                                   leftoverDoublechest.getInventory().getType().toString(),
-                                   leftoverDoublechest.getLocation().getBlockX(),
-                                   leftoverDoublechest.getLocation().getBlockY(),
-                                   leftoverDoublechest.getLocation().getBlockZ(),
-                                   leftoverDoublechest.getWorld().getName()));
-                       }
-                    }
-                }
-            }
+    private void onPlayerDropItem(PlayerDropItemEvent playerDropItemEvent) {
+        Item droppedItem = playerDropItemEvent.getItemDrop();
+        NamespacedKey key = new NamespacedKey(main, "minv_uuid");
+        PersistentDataContainer nbt = droppedItem.getPersistentDataContainer();
+        nbt.set(key, PersistentDataType.STRING, UUID.randomUUID().toString());
+        if(nbt.has(key, PersistentDataType.STRING)) {
+            String fetchedUuid = nbt.get(key, PersistentDataType.STRING);
+            EntityItemTracker itemTracker = new EntityItemTracker(
+                    fetchedUuid,
+                    droppedItem.getCustomName() != null,
+                    droppedItem.getType().toString(),
+                    droppedItem.getLocation().getBlockX(),
+                    droppedItem.getLocation().getBlockY(),
+                    droppedItem.getLocation().getBlockZ(),
+                    droppedItem.getLocation().getWorld().getName());
+            entityManager.createMobWithItem(itemTracker);
         }
     }
 }

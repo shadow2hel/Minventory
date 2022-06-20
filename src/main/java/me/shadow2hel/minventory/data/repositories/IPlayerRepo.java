@@ -1,14 +1,14 @@
 package me.shadow2hel.minventory.data.repositories;
 
-import me.shadow2hel.minventory.model.ModelPlayer;
+import me.shadow2hel.minventory.model.PlayerTracker;
 
 import java.util.List;
 
 public interface IPlayerRepo {
-    ModelPlayer createPlayer(ModelPlayer player);
-    List<ModelPlayer> readAllPlayers();
-    ModelPlayer readPlayer(String UUID);
-    ModelPlayer readPlayer(ModelPlayer player);
-    ModelPlayer updatePlayer(ModelPlayer player);
-    boolean deletePlayer(ModelPlayer player);
+    PlayerTracker createPlayer(PlayerTracker player);
+    List<PlayerTracker> readAllPlayers();
+    PlayerTracker readPlayer(String UUID);
+    PlayerTracker readPlayer(PlayerTracker player);
+    PlayerTracker updatePlayer(PlayerTracker player);
+    boolean deletePlayer(PlayerTracker player);
 }

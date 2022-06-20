@@ -1,11 +1,9 @@
 package me.shadow2hel.minventory.listeners;
 
-import me.shadow2hel.minventory.data.managers.IMobManager;
+import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
-import me.shadow2hel.minventory.data.managers.MobItemsManager;
-import me.shadow2hel.minventory.model.MobWithItem;
-import me.shadow2hel.minventory.model.TouchedInventory;
-import org.bukkit.Bukkit;
+import me.shadow2hel.minventory.model.EntityItemTracker;
+import me.shadow2hel.minventory.model.InventoryTracker;
 import org.bukkit.block.Block;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.ChestBoat;
@@ -17,7 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.DoubleChestInventory;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.ArrayList;
@@ -25,9 +22,9 @@ import java.util.ArrayList;
 public class InventoryEventListener implements Listener {
     private final ArrayList<InventoryType> blackList;
     private final IPlayerInventoryManager playerManager;
-    private final IMobManager mobManager;
+    private final IEntityManager mobManager;
 
-    public InventoryEventListener(IPlayerInventoryManager playerManager, IMobManager mobManager) {
+    public InventoryEventListener(IPlayerInventoryManager playerManager, IEntityManager mobManager) {
         this.playerManager = playerManager;
         this.mobManager = mobManager;
         blackList = new ArrayList<>();
@@ -51,7 +48,7 @@ public class InventoryEventListener implements Listener {
             if(touch.getInventory().getHolder() instanceof ChestedHorse ||
                     touch.getInventory().getHolder() instanceof ChestBoat ||
                     (touch.getInventory().getHolder() instanceof Minecart && touch.getInventory().getHolder() instanceof Vehicle)) {
-                mobManager.createMobWithItem(new MobWithItem(
+                mobManager.createMobWithItem(new EntityItemTracker(
                         ((Vehicle) touch.getInventory().getHolder()).getUniqueId().toString(),
                         ((Vehicle) touch.getInventory().getHolder()).getCustomName() != null,
                         ((Vehicle) touch.getInventory().getHolder()).getType().toString(),
@@ -65,14 +62,14 @@ public class InventoryEventListener implements Listener {
                         DoubleChestInventory doubleChestInventory = (DoubleChestInventory) doubleChest.getInventory();
                         Block left = doubleChestInventory.getLeftSide().getLocation().getBlock();
                         Block right = doubleChestInventory.getRightSide().getLocation().getBlock();
-                        TouchedInventory leftSide = new TouchedInventory(
+                        InventoryTracker leftSide = new InventoryTracker(
                                 touch.getPlayer().getUniqueId().toString(),
                                 doubleChestInventory.getType().toString(),
                                 left.getX(),
                                 left.getY(),
                                 left.getZ(),
                                 left.getWorld().getName());
-                        TouchedInventory rightSide = new TouchedInventory(
+                        InventoryTracker rightSide = new InventoryTracker(
                                 touch.getPlayer().getUniqueId().toString(),
                                 doubleChestInventory.getType().toString(),
                                 right.getX(),
@@ -82,7 +79,7 @@ public class InventoryEventListener implements Listener {
                         playerManager.createTouchedInventory(leftSide);
                         playerManager.createTouchedInventory(rightSide);
                     } else {
-                        playerManager.createTouchedInventory(new TouchedInventory(
+                        playerManager.createTouchedInventory(new InventoryTracker(
                                 touch.getPlayer().getUniqueId().toString(),
                                 touch.getInventory().getType().toString(),
                                 (int) touch.getInventory().getLocation().getX(),
@@ -104,7 +101,7 @@ public class InventoryEventListener implements Listener {
         InventoryHolder target = inventoryMoveItemEvent.getDestination().getHolder();
         InventoryHolder hopper = inventoryMoveItemEvent.getInitiator().getHolder();
         if (source instanceof BlockInventoryHolder sourceChest) {
-            TouchedInventory sourceContainer = new TouchedInventory(
+            InventoryTracker sourceContainer = new InventoryTracker(
                     "HOPPER_TRANSACTION_SOURCE",
                     sourceChest.getInventory().getType().toString(),
                     (int)sourceChest.getInventory().getLocation().getX(),
@@ -113,7 +110,7 @@ public class InventoryEventListener implements Listener {
                     sourceChest.getInventory().getLocation().getWorld().getName());
             playerManager.createTouchedInventory(sourceContainer);
         } else if (source instanceof Vehicle sourceEntity) {
-            MobWithItem sourceContainer = new MobWithItem(
+            EntityItemTracker sourceContainer = new EntityItemTracker(
                     sourceEntity.getUniqueId().toString(),
                     sourceEntity.getCustomName() != null,
                     sourceEntity.getType().toString(),
@@ -126,7 +123,7 @@ public class InventoryEventListener implements Listener {
         }
 
         if (target instanceof BlockInventoryHolder targetChest) {
-            TouchedInventory targetContainer = new TouchedInventory(
+            InventoryTracker targetContainer = new InventoryTracker(
                     "HOPPER_TRANSACTION_TARGET",
                     targetChest.getInventory().getType().toString(),
                     (int)target.getInventory().getLocation().getX(),
@@ -135,7 +132,7 @@ public class InventoryEventListener implements Listener {
                     target.getInventory().getLocation().getWorld().getName());
             playerManager.createTouchedInventory(targetContainer);
         } else if (target instanceof Vehicle targetEntity) {
-            MobWithItem targetContainer = new MobWithItem(
+            EntityItemTracker targetContainer = new EntityItemTracker(
                     targetEntity.getUniqueId().toString(),
                     targetEntity.getCustomName() != null,
                     targetEntity.getType().toString(),
@@ -147,7 +144,7 @@ public class InventoryEventListener implements Listener {
         }
 
         if (hopper instanceof BlockInventoryHolder hopperChest) {
-            TouchedInventory hopperContainer = new TouchedInventory(
+            InventoryTracker hopperContainer = new InventoryTracker(
                     "HOPPER_TRANSACTION_MOVER",
                     hopperChest.getInventory().getType().toString(),
                     (int)hopper.getInventory().getLocation().getX(),
@@ -156,7 +153,32 @@ public class InventoryEventListener implements Listener {
                     hopper.getInventory().getLocation().getWorld().getName());
             playerManager.createTouchedInventory(hopperContainer);
         } else if (hopper instanceof Vehicle hopperEntity) {
-            MobWithItem hopperContainer = new MobWithItem(
+            EntityItemTracker hopperContainer = new EntityItemTracker(
+                    hopperEntity.getUniqueId().toString(),
+                    hopperEntity.getCustomName() != null,
+                    hopperEntity.getType().toString(),
+                    (int)hopperEntity.getLocation().getX(),
+                    (int)hopperEntity.getLocation().getY(),
+                    (int)hopperEntity.getLocation().getZ(),
+                    hopperEntity.getLocation().getWorld().getName());
+            mobManager.createMobWithItem(hopperContainer);
+        }
+    }
+
+    @EventHandler
+    private void onHopperPickup(InventoryPickupItemEvent hopperPickupEvent) {
+        InventoryHolder hopper = hopperPickupEvent.getInventory().getHolder();
+        if (hopper instanceof BlockInventoryHolder hopperChest) {
+            InventoryTracker hopperContainer = new InventoryTracker(
+                    "HOPPER_TRANSACTION_MOVER",
+                    hopperChest.getInventory().getType().toString(),
+                    (int)hopper.getInventory().getLocation().getX(),
+                    (int)hopper.getInventory().getLocation().getY(),
+                    (int)hopper.getInventory().getLocation().getZ(),
+                    hopper.getInventory().getLocation().getWorld().getName());
+            playerManager.createTouchedInventory(hopperContainer);
+        } else if (hopper instanceof Vehicle hopperEntity) {
+            EntityItemTracker hopperContainer = new EntityItemTracker(
                     hopperEntity.getUniqueId().toString(),
                     hopperEntity.getCustomName() != null,
                     hopperEntity.getType().toString(),

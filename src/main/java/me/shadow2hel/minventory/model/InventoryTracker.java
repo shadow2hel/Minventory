@@ -1,6 +1,6 @@
 package me.shadow2hel.minventory.model;
 
-public class TouchedInventory {
+public class InventoryTracker {
     private final String UUID;
     private final String type;
     private final Integer locationX;
@@ -8,7 +8,7 @@ public class TouchedInventory {
     private final Integer locationZ;
     private final String world;
 
-    public TouchedInventory(String UUID, String type, Integer locationX, Integer locationY, Integer locationZ, String world) {
+    public InventoryTracker(String UUID, String type, Integer locationX, Integer locationY, Integer locationZ, String world) {
         this.UUID = UUID;
         this.type = type;
         this.locationX = locationX;

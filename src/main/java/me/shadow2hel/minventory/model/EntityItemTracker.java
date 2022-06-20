@@ -1,16 +1,13 @@
 package me.shadow2hel.minventory.model;
 
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-
-public class MobWithItem {
+public class EntityItemTracker {
     private final String UUID;
     private final boolean hasName;
     private final String type;
     private final int location_x,location_y,location_z;
     private final String world;
 
-    public MobWithItem(String UUID, boolean hasName, String type, int location_x, int location_y, int location_z, String world) {
+    public EntityItemTracker(String UUID, boolean hasName, String type, int location_x, int location_y, int location_z, String world) {
         this.UUID = UUID;
         this.hasName = hasName;
         this.type = type;
