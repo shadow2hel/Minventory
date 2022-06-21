@@ -69,6 +69,11 @@ public class SQLite extends Database {
                 "PRIMARY KEY (`player`)" +
                 ");";
 
+        String SQLiteCreateWipeDates = "CREATE TABLE IF NOT EXISTS minventory_wipes (" +
+                "`date` UNSIGNED BIG INT NOT NULL," +
+                "PRIMARY KEY (`date`)" +
+                ");";
+
         connection = getSQLConnection();
         try {
             Statement s = connection.createStatement();
@@ -77,6 +82,9 @@ public class SQLite extends Database {
             s.executeUpdate(SQLiteCreateMobTable);
             s = connection.createStatement();
             s.executeUpdate(SQLiteCreatePlayerTable);
+            s = connection.createStatement();
+            s.executeUpdate(SQLiteCreateWipeDates);
+            s.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

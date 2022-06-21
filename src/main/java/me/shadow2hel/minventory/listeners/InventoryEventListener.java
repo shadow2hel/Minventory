@@ -4,6 +4,7 @@ import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
 import me.shadow2hel.minventory.model.EntityItemTracker;
 import me.shadow2hel.minventory.model.InventoryTracker;
+import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.entity.ChestBoat;
@@ -168,6 +169,7 @@ public class InventoryEventListener implements Listener {
     @EventHandler
     private void onHopperPickup(InventoryPickupItemEvent hopperPickupEvent) {
         InventoryHolder hopper = hopperPickupEvent.getInventory().getHolder();
+        Bukkit.getLogger().info("pikcup");
         if (hopper instanceof BlockInventoryHolder hopperChest) {
             InventoryTracker hopperContainer = new InventoryTracker(
                     "HOPPER_TRANSACTION_MOVER",

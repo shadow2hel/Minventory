@@ -1,6 +1,7 @@
 package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.Wiper;
+import me.shadow2hel.minventory.constants.MESSAGES;
 import me.shadow2hel.minventory.data.managers.IPlayerManager;
 import me.shadow2hel.minventory.model.PlayerTracker;
 import org.bukkit.event.EventHandler;
@@ -18,15 +19,19 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     private void onPlayerJoin(PlayerJoinEvent playerJoinEvent) {
-        PlayerTracker player = playerManager.readPlayer(playerJoinEvent.getPlayer().getUniqueId().toString());
-        if (player != null) {
-            if (!player.isEnderChestWiped()) {
-                wiper.wipeEnderchest(playerJoinEvent.getPlayer());
+        if (!wiper.isWiping()) {
+            PlayerTracker player = playerManager.readPlayer(playerJoinEvent.getPlayer().getUniqueId().toString());
+            if (player != null) {
+                if (!player.isEnderChestWiped()) {
+                    wiper.wipeEnderchest(playerJoinEvent.getPlayer());
+                }
+            } else {
+                PlayerTracker freshPlayer = new PlayerTracker(playerJoinEvent.getPlayer().getUniqueId().toString(),
+                        true, 0, false);
+                playerManager.createPlayer(freshPlayer);
             }
         } else {
-            PlayerTracker freshPlayer = new PlayerTracker(playerJoinEvent.getPlayer().getUniqueId().toString(),
-                    true, 0, false);
-            playerManager.createPlayer(freshPlayer);
+            playerJoinEvent.getPlayer().kickPlayer(MESSAGES.PLAYERJOINWIPE);
         }
     }
 }

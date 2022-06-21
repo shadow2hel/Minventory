@@ -1,8 +1,10 @@
 package me.shadow2hel.minventory;
 
+import me.shadow2hel.minventory.constants.MESSAGES;
 import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
 import me.shadow2hel.minventory.data.managers.IPlayerManager;
+import me.shadow2hel.minventory.data.managers.IWipeManager;
 import me.shadow2hel.minventory.model.EntityItemTracker;
 import me.shadow2hel.minventory.model.PlayerTracker;
 import me.shadow2hel.minventory.model.InventoryTracker;
@@ -17,22 +19,29 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
 public class Wiper {
+    private boolean isWiping;
     private final IEntityManager mobManager;
     private final IPlayerInventoryManager playerInventoryManager;
     private final IPlayerManager playerManager;
+    private final IWipeManager wipeManager;
     private final JavaPlugin main;
 
-    public Wiper(IEntityManager mobManager, IPlayerInventoryManager playerInventoryManager, IPlayerManager playerManager, JavaPlugin main) {
+    public Wiper(IEntityManager mobManager, IPlayerInventoryManager playerInventoryManager, IPlayerManager playerManager, IWipeManager wipeManager, JavaPlugin main) {
+        this.isWiping = false;
         this.mobManager = mobManager;
         this.playerInventoryManager = playerInventoryManager;
         this.playerManager = playerManager;
+        this.wipeManager = wipeManager;
         this.main = main;
         trackEntities();
+        wipeCheckOnCrash();
     }
 
     private List<Chunk> getNearbyChunks(World world, int location_x, int location_z) {
@@ -57,6 +66,37 @@ public class Wiper {
         return possibleChunks;
     }
 
+    public void wipeCheckOnCrash() {
+        Date lastWipeDate = wipeManager.readLatestWipe();
+        if (lastWipeDate != null) {
+            Calendar lastWipe = Calendar.getInstance();
+            lastWipe.setTime(lastWipeDate);
+            Calendar currentTime = Calendar.getInstance();
+            currentTime.setTime(new Date());
+            // Check if today has already been wiped
+            if (lastWipe.get(Calendar.DAY_OF_YEAR) != currentTime.get(Calendar.DAY_OF_YEAR)
+            && lastWipe.get(Calendar.YEAR) == currentTime.get(Calendar.YEAR)
+            && lastWipe.get(Calendar.HOUR_OF_DAY) == 0) {
+                wipe();
+            }
+        }
+    }
+
+    private void wipeTimer() {
+        Bukkit.getScheduler().runTaskTimer(main, task -> {
+            Calendar currentTime = Calendar.getInstance();
+            if (currentTime.get(Calendar.HOUR_OF_DAY) == 23 && currentTime.get(Calendar.MINUTE) >= 30) {
+                scheduleWipe();
+                task.cancel();
+            }
+        }, 0L, 20L);
+    }
+    public void scheduleWipe() {
+        isWiping = true;
+        main.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(MESSAGES.PLAYERJOINWIPE));
+        wipe();
+        main.getServer().shutdown();
+    }
 
     private void trackEntities() {
         BukkitScheduler scheduler = Bukkit.getScheduler();
@@ -106,6 +146,8 @@ public class Wiper {
         wipeEntities();
         wipeContainers();
         wipeEnderchests();
+        main.getLogger().info("" + new Date().getTime());
+        wipeManager.createWipe(new Date());
         return true;
     }
 
@@ -197,5 +239,9 @@ public class Wiper {
             return container;
         }
         return null;
+    }
+
+    public boolean isWiping() {
+        return isWiping;
     }
 }
