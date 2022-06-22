@@ -12,3 +12,7 @@ commands:
     description: Does the wipe on schedule
     usage: /<command>
     permission: minventory.scheduleWipe
+  minvgui:
+    description: Opens gui
+    usage: /<command>
+    permission: minventory.gui

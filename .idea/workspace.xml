@@ -4,20 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Implemented item tracking">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvSchedule.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/constants/MESSAGES.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/IWipeManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/managers/WipeManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/IWipeRepo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/repositories/WipeRepo.java" afterDir="false" />
+    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Wipe mechanic done, visuals are remaining">
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvGUI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GuiScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/SQLite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/data/SQLite.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerJoinListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerJoinListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,6 +49,17 @@
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="build" type="c8890929:TasksNode$1" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Minventory" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Minventory" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -75,6 +81,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2AfZWYXGvydUXmXH8DIDI9eXW9D" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -83,19 +92,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "jdk.selected.JAVA_MODULE": "17",
+    "last_opened_file_path": "F:/Minecraft/servers/spigot 1.19/spigot-1.19.jar",
+    "project.structure.last.edited": "Problems",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
-  <component name="RunManager" selected="Gradle.Minventory [build]">
+}]]></component>
+  <component name="RunManager" selected="JAR Application.Spigot Server Standalone">
     <configuration name="Minventory [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -132,6 +145,27 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Minventory [copyJarToServer]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="copyJarToServer" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Minventory [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -153,8 +187,41 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Spigot Server Standalone" type="JarApplication">
+      <option name="JAR_PATH" value="F:/Minecraft/servers/spigot 1.19/spigot-1.19.jar" />
+      <option name="PROGRAM_PARAMETERS" value="nogui" />
+      <option name="WORKING_DIRECTORY" value="F:\Minecraft\servers\spigot 1.19" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2">
+        <option name="Gradle.BeforeRunTask" enabled="true" tasks="jar" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+        <option name="Gradle.BeforeRunTask" enabled="true" tasks="copyJarToServer" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      </method>
+    </configuration>
+    <configuration name="Spigot Server" type="Remote">
+      <module name="Minventory" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="5005" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.Minventory [copyJarToServer]" />
+      <item itemvalue="Gradle.Minventory [build]" />
+      <item itemvalue="Gradle.Minventory [clean]" />
+      <item itemvalue="Gradle.Minventory [jar]" />
+      <item itemvalue="JAR Application.Spigot Server Standalone" />
+      <item itemvalue="Remote JVM Debug.Spigot Server" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Minventory [copyJarToServer]" />
         <item itemvalue="Gradle.Minventory [build]" />
         <item itemvalue="Gradle.Minventory [jar]" />
         <item itemvalue="Gradle.Minventory [clean]" />
@@ -205,7 +272,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655762282883</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Wipe mechanic done, visuals are remaining">
+      <created>1655840764486</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1655840764486</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -225,6 +299,22 @@
     <MESSAGE value="Wipe mechanics done" />
     <MESSAGE value="Almost all of hopper tracking done" />
     <MESSAGE value="Implemented item tracking" />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented item tracking" />
+    <MESSAGE value="Wipe mechanic done, visuals are remaining" />
+    <option name="LAST_COMMIT_MESSAGE" value="Wipe mechanic done, visuals are remaining" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint type="java-exception">
+          <properties class="org.bukkit.event.EventException" package="org.bukkit.event" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="JarApplication">
+        <watch expression="e.getInventory()" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

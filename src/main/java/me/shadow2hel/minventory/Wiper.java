@@ -42,6 +42,7 @@ public class Wiper {
         this.main = main;
         trackEntities();
         wipeCheckOnCrash();
+        wipeTimer();
     }
 
     private List<Chunk> getNearbyChunks(World world, int location_x, int location_z) {

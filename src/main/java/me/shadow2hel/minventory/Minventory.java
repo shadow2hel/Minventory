@@ -1,5 +1,6 @@
 package me.shadow2hel.minventory;
 
+import me.shadow2hel.minventory.commands.CommandMinvGUI;
 import me.shadow2hel.minventory.commands.CommandMinvReset;
 import me.shadow2hel.minventory.commands.CommandMinvSchedule;
 import me.shadow2hel.minventory.data.Database;
@@ -29,8 +30,7 @@ public class Minventory extends JavaPlugin {
         IWipeManager wipeManager = new WipeManager(new WipeRepo(sqlLite, this), this);
         Wiper wiper = new Wiper(mobManager, playerInventoryManager, playerManager, wipeManager,  this);
         initializeListeners(playerInventoryManager, mobManager, playerManager, wiper);
-        this.getCommand("wipe").setExecutor(new CommandMinvReset(this, wiper));
-        this.getCommand("scheduleWipe").setExecutor(new CommandMinvSchedule(this, wiper));
+        initializeCommands(wiper);
     }
 
     private void initializeListeners(IPlayerInventoryManager playerInventoryManager,
@@ -40,6 +40,12 @@ public class Minventory extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MobPickupListener(mobManager), this);
         getServer().getPluginManager().registerEvents(new MobPortalListener(mobManager), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(playerManager, wiper), this);
+
     }
 
+    private void initializeCommands(Wiper wiper) {
+        this.getCommand("wipe").setExecutor(new CommandMinvReset(this, wiper));
+        this.getCommand("scheduleWipe").setExecutor(new CommandMinvSchedule(this, wiper));
+        this.getCommand("minvgui").setExecutor(new CommandMinvGUI(this));
+    }
 }

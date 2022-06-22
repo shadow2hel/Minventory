@@ -29,3 +29,12 @@ processResources {
         }
     }
 }
+
+task copyJarToServer(type: Copy) {
+    copy {
+        from "$buildDir/libs/" + "Minventory" + "-" + project.version + ".jar"
+        into "F:/Minecraft/servers/spigot 1.19/plugins"
+    }
+}
+
+compileJava.finalizedBy(copyJarToServer)
