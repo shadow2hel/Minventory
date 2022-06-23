@@ -15,21 +15,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 
-public abstract class GuiScreen implements Listener, InventoryHolder {
+public abstract class GUIScreen implements Listener, InventoryHolder {
     private final JavaPlugin main;
     private final Inventory inv;
     private final Player player;
 
-    public GuiScreen(JavaPlugin main, Player player, int inventorySize, String inventoryName) {
+    public GUIScreen(JavaPlugin main, Player player, int inventorySize, String inventoryName) {
         this.main = main;
         this.player = player;
         this.inv = Bukkit.createInventory(this, inventorySize, inventoryName);
         attachListener();
+        initializeGrid();
     }
 
     private void attachListener() {
         main.getServer().getPluginManager().registerEvents(this, main);
     }
+
+    protected abstract void initializeGrid();
 
     @EventHandler
     protected abstract void onClick(final InventoryClickEvent clickEvent);

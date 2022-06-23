@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Wipe mechanic done, visuals are remaining">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvGUI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GuiScreen.java" afterDir="false" />
+    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Starting gui">
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIHome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GuiScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,16 +90,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "F:/Minecraft/servers/spigot 1.19/spigot-1.19.jar",
-    "project.structure.last.edited": "Problems",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/Minecraft/servers/spigot 1.19/spigot-1.19.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="JAR Application.Spigot Server Standalone">
     <configuration name="Minventory [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -279,7 +277,14 @@
       <option name="project" value="LOCAL" />
       <updated>1655840764486</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Starting gui">
+      <created>1655927606533</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1655927606533</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -300,7 +305,8 @@
     <MESSAGE value="Almost all of hopper tracking done" />
     <MESSAGE value="Implemented item tracking" />
     <MESSAGE value="Wipe mechanic done, visuals are remaining" />
-    <option name="LAST_COMMIT_MESSAGE" value="Wipe mechanic done, visuals are remaining" />
+    <MESSAGE value="Starting gui" />
+    <option name="LAST_COMMIT_MESSAGE" value="Starting gui" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -309,6 +315,11 @@
           <properties class="org.bukkit.event.EventException" package="org.bukkit.event" />
           <option name="timeStamp" value="1" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java</url>
+          <line>27</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>

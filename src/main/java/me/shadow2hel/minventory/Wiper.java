@@ -1,5 +1,6 @@
 package me.shadow2hel.minventory;
 
+import com.google.common.collect.ImmutableList;
 import me.shadow2hel.minventory.constants.MESSAGES;
 import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
@@ -11,10 +12,7 @@ import me.shadow2hel.minventory.model.InventoryTracker;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -87,10 +85,44 @@ public class Wiper {
         Bukkit.getScheduler().runTaskTimer(main, task -> {
             Calendar currentTime = Calendar.getInstance();
             if (currentTime.get(Calendar.HOUR_OF_DAY) == 23 && currentTime.get(Calendar.MINUTE) >= 30) {
-                scheduleWipe();
+                if (currentTime.get(Calendar.MINUTE) < 45 && currentTime.get(Calendar.MINUTE) % 15 == 0 && currentTime.get(Calendar.SECOND) == 0) {
+                    wipeNotification("", Math.abs(currentTime.get(Calendar.MINUTE) - 60), "minutes", 10, 200, 10 );
+                } else if (currentTime.get(Calendar.MINUTE) < 59 && currentTime.get(Calendar.MINUTE) % 5 == 0 && currentTime.get(Calendar.SECOND) == 0) {
+                    wipeNotification("", Math.abs(currentTime.get(Calendar.MINUTE) - 60), "minutes", 10, 200, 10 );
+                } else if (currentTime.get(Calendar.MINUTE) == 59 && currentTime.get(Calendar.SECOND) == 0) {
+                    wipeNotification("", Math.abs(currentTime.get(Calendar.MINUTE) - 60), "minute", 10, 200, 10 );
+                } else if (currentTime.get(Calendar.MINUTE) == 59 && currentTime.get(Calendar.SECOND) == 30) {
+                    wipeNotification("", Math.abs(currentTime.get(Calendar.SECOND) - 60), "seconds", 10, 200, 10 );
+                } else if (currentTime.get(Calendar.MINUTE) == 59 && currentTime.get(Calendar.SECOND) >= 50) {
+                    wipeNotification("" + (60 - currentTime.get(Calendar.SECOND)), currentTime.get(Calendar.SECOND), "", 5, 20, 5 );
+                }
+            } else if (currentTime.get(Calendar.HOUR_OF_DAY) == 0 && currentTime.get(Calendar.MINUTE) == 0 && currentTime.get(Calendar.SECOND) == 0) {
                 task.cancel();
+                scheduleWipe();
             }
         }, 0L, 20L);
+    }
+
+    private void wipeNotification(String title, int timeLeft, String timeType, int fadeIn, int stay, int fadeOut) {
+        main.getLogger().info("Server restarting in " + timeLeft + " " + timeType);
+        if (title.isEmpty()) {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.sendTitle(ChatColor.BOLD + "" + ChatColor.GOLD + "Wipe in " + timeLeft + " " + timeType,
+                        ChatColor.DARK_GREEN + "Collect your goods!",
+                        fadeIn,
+                        stay,
+                        fadeOut);
+            });
+        } else {
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.sendTitle(ChatColor.BOLD + "" + ChatColor.DARK_RED + title,
+                        "",
+                        fadeIn,
+                        stay,
+                        fadeOut);
+            });
+        }
+
     }
     public void scheduleWipe() {
         isWiping = true;

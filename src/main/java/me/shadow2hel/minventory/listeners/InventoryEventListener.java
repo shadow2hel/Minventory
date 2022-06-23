@@ -2,7 +2,7 @@ package me.shadow2hel.minventory.listeners;
 
 import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
-import me.shadow2hel.minventory.gui.GuiScreen;
+import me.shadow2hel.minventory.gui.GUIScreen;
 import me.shadow2hel.minventory.model.EntityItemTracker;
 import me.shadow2hel.minventory.model.InventoryTracker;
 import org.bukkit.Bukkit;
@@ -46,7 +46,7 @@ public class InventoryEventListener implements Listener {
 
     @EventHandler
     public void onInventoryTouch(InventoryOpenEvent touch) {
-        if (!(touch.getInventory().getHolder() instanceof GuiScreen) && !blackList.contains(touch.getInventory().getType())) {
+        if (!(touch.getInventory().getHolder() instanceof GUIScreen) && !blackList.contains(touch.getInventory().getType())) {
             if(touch.getInventory().getHolder() instanceof ChestedHorse ||
                     touch.getInventory().getHolder() instanceof ChestBoat ||
                     (touch.getInventory().getHolder() instanceof Minecart && touch.getInventory().getHolder() instanceof Vehicle)) {

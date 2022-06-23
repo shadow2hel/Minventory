@@ -1,31 +1,42 @@
 package me.shadow2hel.minventory.gui;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 
-public class GUIConfirmation extends GuiScreen {
+public final class GUIConfirmation extends GUIScreen {
 
     public GUIConfirmation(JavaPlugin main, Player player) {
         super(main, player, 27, ChatColor.DARK_GREEN + "Confirmation");
-        initializeItems();
         player.openInventory(getInventory());
     }
 
-    private void initializeItems() {
-        getInventory().setItem(5, createGuiItem(Material.STICK, "TWIG", "This is", "A test", "Of faith"));
+
+    @Override
+    protected void initializeGrid() {
+        int left = 0;
+        int middle = 3;
+        int right = 6;
+        for (int x = 0; x < getInventory().getSize(); x++) {
+            int y = x / 9;
+            int relativex = x - 9 * y;
+            ItemStack itemStack;
+            if ((relativex < middle) || (relativex >= right)) {
+                itemStack = createGuiItem(Material.BLACK_STAINED_GLASS_PANE, "SIDE", "HOE");
+            } else {
+                itemStack = createGuiItem(Material.DIAMOND, "MIDDLE", "CHILD");
+            }
+
+            getInventory().setItem(x, itemStack);
+        }
+
     }
 
     protected ItemStack createGuiItem(final Material material, final String name, final String... lore) {
@@ -45,7 +56,7 @@ public class GUIConfirmation extends GuiScreen {
 
     // Check for clicks on items
     @EventHandler
-    public void onClick(final InventoryClickEvent clickEvent) {
+    protected void onClick(final InventoryClickEvent clickEvent) {
         if (!clickEvent.getInventory().equals(getInventory())) return;
 
         clickEvent.setCancelled(true);
