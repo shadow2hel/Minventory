@@ -1,11 +1,13 @@
 package me.shadow2hel.minventory.commands;
 
+import me.shadow2hel.minventory.constants.KEYS;
 import me.shadow2hel.minventory.data.managers.IPlayerManager;
 import me.shadow2hel.minventory.gui.GUIConfirmation;
 import me.shadow2hel.minventory.gui.GUIHome;
 import me.shadow2hel.minventory.gui.GUIInfo;
 import me.shadow2hel.minventory.gui.GUIScreen;
 import me.shadow2hel.minventory.model.PlayerTracker;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -87,6 +89,10 @@ public class CommandMinvGUI implements CommandExecutor {
         if (dataPlayer.isMarkedForPrestige()) {
             itemStack = createGuiItem(Material.RED_SHULKER_BOX, "Prestige " + dataPlayer.getPrestige(),
                     "You will prestige at the next wipe!",
+                    "You have unlocked " + dataPlayer.getPrestige() + " shulker boxes so far");
+        } else if (!dataPlayer.isMarkedForPrestige() && dataPlayer.getPrestige() >= KEYS.PRESTIGEMAX - 1) {
+            itemStack = createGuiItem(Material.RED_SHULKER_BOX, "Prestige " + dataPlayer.getPrestige(),
+                    ChatColor.BOLD + "You have unlocked all the prestiges!",
                     "You have unlocked " + dataPlayer.getPrestige() + " shulker boxes so far");
         } else {
             itemStack = createGuiItem(Material.GREEN_SHULKER_BOX, "Prestige " + dataPlayer.getPrestige(),

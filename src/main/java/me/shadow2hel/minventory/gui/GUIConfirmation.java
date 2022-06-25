@@ -41,7 +41,7 @@ public final class GUIConfirmation extends GUIScreen {
                 itemStack = createGuiItem(Material.RED_STAINED_GLASS_PANE, "Decline");
             } else {
                 if (y == rows / 2 && relativex == 4)
-                    itemStack = createGuiItem(Material.DIAMOND, "INFO");
+                    itemStack = infoItem;
             }
 
             getInventory().setItem(x, itemStack);

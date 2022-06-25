@@ -133,6 +133,7 @@ public class Wiper {
         }
         wipeEnderchests();
         wipeEnderchestsOnline();
+        upgradePrestiges();
         return true;
     }
 
@@ -228,6 +229,16 @@ public class Wiper {
         PlayerTracker dataPlayer = playerManager.readPlayer(player.getUniqueId().toString());
         dataPlayer.setEnderChestWiped(true);
         playerManager.updatePlayer(dataPlayer);
+    }
+
+    private void upgradePrestiges() {
+        List<PlayerTracker> dataPlayers = playerManager.readAllPlayers();
+        dataPlayers.forEach(dataPlayer -> {
+            if (dataPlayer.isMarkedForPrestige()){
+                dataPlayer.setPrestige(dataPlayer.getPrestige() + 1);
+                playerManager.updatePlayer(dataPlayer);
+            }
+        });
     }
 
     public boolean isWiping() {
