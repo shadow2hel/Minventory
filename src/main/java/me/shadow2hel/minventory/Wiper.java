@@ -125,6 +125,7 @@ public class Wiper {
             wipeContainers(loadedChunk);
         }
         wipeEnderchests();
+        wipeEnderchestsOnline();
         return true;
     }
 
@@ -140,33 +141,36 @@ public class Wiper {
                     if (millisLast != null) {
                         lastInteracted.setTimeInMillis(millisLast);
                     }
-                    if (lastInteracted.after(lastWipe) && entity instanceof InventoryHolder inventoryHolder) {
-                        PDCUtils.setNbt(main, entity, KEYS.LASTWIPED, PersistentDataType.LONG, currentTime.getTimeInMillis());
-                        if (inventoryHolder instanceof ChestedHorse chestedHorse) {
-                            ItemStack saddle = chestedHorse.getInventory().getSaddle();
-                            chestedHorse.getInventory().clear();
-                            chestedHorse.getInventory().setSaddle(saddle);
-                        } else if (inventoryHolder instanceof Mob mob) {
-                            if (mob.getEquipment() != null) {
-                                ItemStack[] armors = mob.getEquipment().getArmorContents();
-                                for (int i = 0; i < armors.length; i++) {
-                                    if (VALUABLES.GetAllBlacklist().contains(armors[i].getType())) {
-                                        armors[i] = null;
+                    if (lastWipe.after(lastInteracted)) {
+                        if ( entity instanceof InventoryHolder inventoryHolder) {
+                            PDCUtils.setNbt(main, entity, KEYS.LASTWIPED, PersistentDataType.LONG, currentTime.getTimeInMillis());
+                            if (inventoryHolder instanceof ChestedHorse chestedHorse) {
+                                ItemStack saddle = chestedHorse.getInventory().getSaddle();
+                                chestedHorse.getInventory().clear();
+                                chestedHorse.getInventory().setSaddle(saddle);
+                            } else if (inventoryHolder instanceof Mob mob) {
+                                if (mob.getEquipment() != null) {
+                                    ItemStack[] armors = mob.getEquipment().getArmorContents();
+                                    for (int i = 0; i < armors.length; i++) {
+                                        if (VALUABLES.GetAllBlacklist().contains(armors[i].getType())) {
+                                            armors[i] = null;
+                                        }
+                                    }
+                                    mob.getEquipment().setArmorContents(armors);
+                                    mob.getEquipment().getItemInMainHand();
+                                    if (VALUABLES.GetArmorWeaponsBlacklist().contains(mob.getEquipment().getItemInMainHand().getType())) {
+                                        mob.getEquipment().setItemInMainHand(null);
                                     }
                                 }
-                                mob.getEquipment().setArmorContents(armors);
-                                mob.getEquipment().getItemInMainHand();
-                                if (VALUABLES.GetArmorWeaponsBlacklist().contains(mob.getEquipment().getItemInMainHand().getType())) {
-                                    mob.getEquipment().setItemInMainHand(null);
-                                }
-                            }
 
+                            } else {
+                                inventoryHolder.getInventory().clear();
+                            }
                         } else {
-                            inventoryHolder.getInventory().clear();
+                            entity.remove();
                         }
-                    } else {
-                        entity.remove();
                     }
+
 
                 });
     }
@@ -185,7 +189,7 @@ public class Wiper {
                     if (millisLast != null) {
                         lastInteracted.setTimeInMillis(millisLast);
                     }
-                    if (lastInteracted.after(lastWipe)) {
+                    if (lastWipe.after(lastInteracted)) {
                         if (((Container) container) instanceof Furnace furnaceContainer) {
                             furnaceContainer.getSnapshotInventory().clear(0);
                         } else {
@@ -204,6 +208,12 @@ public class Wiper {
             PlayerTracker updatedPlayer = playerManager.updatePlayer(player);
         }
         main.getLogger().info("Enderchests are marked for wipe");
+    }
+
+    private void wipeEnderchestsOnline() {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.getEnderChest().clear();
+        });
     }
 
     public void wipeEnderchest(Player player) {

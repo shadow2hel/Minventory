@@ -4,19 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Shulker mechanics done">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/constants/KEYS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/ChunkListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/ItemDropListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/pdc/PDCUtils.java" afterDir="false" />
+    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Changed wiping mechanic based on NBT">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvReset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvReset.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPickupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPickupListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPortalListener.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerInteractListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerInteractListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/ItemDropListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/ItemDropListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerShulkerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerShulkerListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -315,7 +309,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656115521877</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Changed wiping mechanic based on NBT">
+      <created>1656175277528</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1656175277528</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -339,7 +340,8 @@
     <MESSAGE value="Starting gui" />
     <MESSAGE value="Countdown visuals done" />
     <MESSAGE value="Shulker mechanics done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Shulker mechanics done" />
+    <MESSAGE value="Changed wiping mechanic based on NBT" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed wiping mechanic based on NBT" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -353,13 +355,13 @@
           <line>85</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerShulkerListener.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="80" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="JarApplication">
-        <watch expression="container instanceof BlockInventoryHolder chestContainer" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Minventory$Spigot_Server_Standalone.ic" NAME="Spigot Server Standalone Coverage Results" MODIFIED="1656088680710" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
