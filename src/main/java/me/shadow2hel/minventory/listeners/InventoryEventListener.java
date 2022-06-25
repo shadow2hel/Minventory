@@ -1,10 +1,12 @@
 package me.shadow2hel.minventory.listeners;
 
+import me.shadow2hel.minventory.constants.KEYS;
 import me.shadow2hel.minventory.data.managers.IEntityManager;
 import me.shadow2hel.minventory.data.managers.IPlayerInventoryManager;
 import me.shadow2hel.minventory.gui.GUIScreen;
 import me.shadow2hel.minventory.model.EntityItemTracker;
 import me.shadow2hel.minventory.model.InventoryTracker;
+import me.shadow2hel.minventory.pdc.PDCUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.DoubleChest;
@@ -18,15 +20,21 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.DoubleChestInventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class InventoryEventListener implements Listener {
+    private final JavaPlugin main;
     private final ArrayList<InventoryType> blackList;
     private final IPlayerInventoryManager playerManager;
     private final IEntityManager mobManager;
 
-    public InventoryEventListener(IPlayerInventoryManager playerManager, IEntityManager mobManager) {
+    public InventoryEventListener(JavaPlugin main, IPlayerInventoryManager playerManager, IEntityManager mobManager) {
+        this.main = main;
         this.playerManager = playerManager;
         this.mobManager = mobManager;
         blackList = new ArrayList<>();
@@ -47,54 +55,19 @@ public class InventoryEventListener implements Listener {
     @EventHandler
     public void onInventoryTouch(InventoryOpenEvent touch) {
         if (!(touch.getInventory().getHolder() instanceof GUIScreen) && !blackList.contains(touch.getInventory().getType())) {
-            if(touch.getInventory().getHolder() instanceof ChestedHorse ||
-                    touch.getInventory().getHolder() instanceof ChestBoat ||
-                    (touch.getInventory().getHolder() instanceof Minecart && touch.getInventory().getHolder() instanceof Vehicle)) {
-                mobManager.createMobWithItem(new EntityItemTracker(
-                        ((Vehicle) touch.getInventory().getHolder()).getUniqueId().toString(),
-                        ((Vehicle) touch.getInventory().getHolder()).getCustomName() != null,
-                        ((Vehicle) touch.getInventory().getHolder()).getType().toString(),
-                        (int)((Vehicle) touch.getInventory().getHolder()).getLocation().getX(),
-                        (int)((Vehicle) touch.getInventory().getHolder()).getLocation().getY(),
-                        (int)((Vehicle) touch.getInventory().getHolder()).getLocation().getZ(),
-                        ((Vehicle) touch.getInventory().getHolder()).getLocation().getWorld().getUID().toString()));
+            Calendar cal = Calendar.getInstance();
+            if (touch.getInventory().getHolder() instanceof  DoubleChest doubleChest ) {
+                InventoryHolder leftSide = doubleChest.getLeftSide();
+                InventoryHolder rightSide = doubleChest.getRightSide();
+                if (PDCUtils.getNbt(main, (PersistentDataHolder) leftSide, KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+                    PDCUtils.setNbt(main, (PersistentDataHolder) leftSide, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
+                if (PDCUtils.getNbt(main, (PersistentDataHolder) rightSide, KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+                    PDCUtils.setNbt(main, (PersistentDataHolder) rightSide, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
             } else {
-                if (touch.getInventory().getType() != InventoryType.ENDER_CHEST) {
-                    if (touch.getInventory().getHolder() instanceof DoubleChest doubleChest) {
-                        DoubleChestInventory doubleChestInventory = (DoubleChestInventory) doubleChest.getInventory();
-                        Block left = doubleChestInventory.getLeftSide().getLocation().getBlock();
-                        Block right = doubleChestInventory.getRightSide().getLocation().getBlock();
-                        InventoryTracker leftSide = new InventoryTracker(
-                                touch.getPlayer().getUniqueId().toString(),
-                                doubleChestInventory.getType().toString(),
-                                left.getX(),
-                                left.getY(),
-                                left.getZ(),
-                                left.getWorld().getUID().toString());
-                        InventoryTracker rightSide = new InventoryTracker(
-                                touch.getPlayer().getUniqueId().toString(),
-                                doubleChestInventory.getType().toString(),
-                                right.getX(),
-                                right.getY(),
-                                right.getZ(),
-                                right.getWorld().getUID().toString());
-                        playerManager.createTouchedInventory(leftSide);
-                        playerManager.createTouchedInventory(rightSide);
-                    } else {
-                        playerManager.createTouchedInventory(new InventoryTracker(
-                                touch.getPlayer().getUniqueId().toString(),
-                                touch.getInventory().getType().toString(),
-                                (int) touch.getInventory().getLocation().getX(),
-                                (int) touch.getInventory().getLocation().getY(),
-                                (int) touch.getInventory().getLocation().getZ(),
-                                touch.getInventory().getLocation().getWorld().getUID().toString()));
-                    }
-                }
+                if (PDCUtils.getNbt(main, (PersistentDataHolder) touch.getInventory().getHolder(), KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+                    PDCUtils.setNbt(main, (PersistentDataHolder) touch.getInventory().getHolder(), KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
             }
-
         }
-
-
     }
 
     @EventHandler
@@ -102,95 +75,21 @@ public class InventoryEventListener implements Listener {
         InventoryHolder source = inventoryMoveItemEvent.getSource().getHolder();
         InventoryHolder target = inventoryMoveItemEvent.getDestination().getHolder();
         InventoryHolder hopper = inventoryMoveItemEvent.getInitiator().getHolder();
-        if (source instanceof BlockInventoryHolder sourceChest) {
-            InventoryTracker sourceContainer = new InventoryTracker(
-                    "HOPPER_TRANSACTION_SOURCE",
-                    sourceChest.getInventory().getType().toString(),
-                    (int)sourceChest.getInventory().getLocation().getX(),
-                    (int)sourceChest.getInventory().getLocation().getY(),
-                    (int)sourceChest.getInventory().getLocation().getZ(),
-                    sourceChest.getInventory().getLocation().getWorld().getUID().toString());
-            playerManager.createTouchedInventory(sourceContainer);
-        } else if (source instanceof Vehicle sourceEntity) {
-            EntityItemTracker sourceContainer = new EntityItemTracker(
-                    sourceEntity.getUniqueId().toString(),
-                    sourceEntity.getCustomName() != null,
-                    sourceEntity.getType().toString(),
-                    (int)sourceEntity.getLocation().getX(),
-                    (int)sourceEntity.getLocation().getY(),
-                    (int)sourceEntity.getLocation().getZ(),
-                    sourceEntity.getLocation().getWorld().getUID().toString()
-            );
-            mobManager.createMobWithItem(sourceContainer);
-        }
-
-        if (target instanceof BlockInventoryHolder targetChest) {
-            InventoryTracker targetContainer = new InventoryTracker(
-                    "HOPPER_TRANSACTION_TARGET",
-                    targetChest.getInventory().getType().toString(),
-                    (int)target.getInventory().getLocation().getX(),
-                    (int)target.getInventory().getLocation().getY(),
-                    (int)target.getInventory().getLocation().getZ(),
-                    target.getInventory().getLocation().getWorld().getUID().toString());
-            playerManager.createTouchedInventory(targetContainer);
-        } else if (target instanceof Vehicle targetEntity) {
-            EntityItemTracker targetContainer = new EntityItemTracker(
-                    targetEntity.getUniqueId().toString(),
-                    targetEntity.getCustomName() != null,
-                    targetEntity.getType().toString(),
-                    (int)targetEntity.getLocation().getX(),
-                    (int)targetEntity.getLocation().getY(),
-                    (int)targetEntity.getLocation().getZ(),
-                    targetEntity.getLocation().getWorld().getUID().toString());
-            mobManager.createMobWithItem(targetContainer);
-        }
-
-        if (hopper instanceof BlockInventoryHolder hopperChest) {
-            InventoryTracker hopperContainer = new InventoryTracker(
-                    "HOPPER_TRANSACTION_MOVER",
-                    hopperChest.getInventory().getType().toString(),
-                    (int)hopper.getInventory().getLocation().getX(),
-                    (int)hopper.getInventory().getLocation().getY(),
-                    (int)hopper.getInventory().getLocation().getZ(),
-                    hopper.getInventory().getLocation().getWorld().getUID().toString());
-            playerManager.createTouchedInventory(hopperContainer);
-        } else if (hopper instanceof Vehicle hopperEntity) {
-            EntityItemTracker hopperContainer = new EntityItemTracker(
-                    hopperEntity.getUniqueId().toString(),
-                    hopperEntity.getCustomName() != null,
-                    hopperEntity.getType().toString(),
-                    (int)hopperEntity.getLocation().getX(),
-                    (int)hopperEntity.getLocation().getY(),
-                    (int)hopperEntity.getLocation().getZ(),
-                    hopperEntity.getLocation().getWorld().getUID().toString());
-            mobManager.createMobWithItem(hopperContainer);
-        }
+        Calendar cal = Calendar.getInstance();
+        if (PDCUtils.getNbt(main, (PersistentDataHolder) source, KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+            PDCUtils.setNbt(main, (PersistentDataHolder) source, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
+        if (PDCUtils.getNbt(main, (PersistentDataHolder) target, KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+            PDCUtils.setNbt(main, (PersistentDataHolder) target, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
+        if (PDCUtils.getNbt(main, (PersistentDataHolder) hopper, KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+            PDCUtils.setNbt(main, (PersistentDataHolder) hopper, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
     }
 
     @EventHandler
     private void onHopperPickup(InventoryPickupItemEvent hopperPickupEvent) {
         InventoryHolder hopper = hopperPickupEvent.getInventory().getHolder();
-        Bukkit.getLogger().info("pikcup");
-        if (hopper instanceof BlockInventoryHolder hopperChest) {
-            InventoryTracker hopperContainer = new InventoryTracker(
-                    "HOPPER_TRANSACTION_MOVER",
-                    hopperChest.getInventory().getType().toString(),
-                    (int)hopper.getInventory().getLocation().getX(),
-                    (int)hopper.getInventory().getLocation().getY(),
-                    (int)hopper.getInventory().getLocation().getZ(),
-                    hopper.getInventory().getLocation().getWorld().getUID().toString());
-            playerManager.createTouchedInventory(hopperContainer);
-        } else if (hopper instanceof Vehicle hopperEntity) {
-            EntityItemTracker hopperContainer = new EntityItemTracker(
-                    hopperEntity.getUniqueId().toString(),
-                    hopperEntity.getCustomName() != null,
-                    hopperEntity.getType().toString(),
-                    (int)hopperEntity.getLocation().getX(),
-                    (int)hopperEntity.getLocation().getY(),
-                    (int)hopperEntity.getLocation().getZ(),
-                    hopperEntity.getLocation().getWorld().getUID().toString());
-            mobManager.createMobWithItem(hopperContainer);
-        }
+        Calendar cal = Calendar.getInstance();
+        if (PDCUtils.getNbt(main, (PersistentDataHolder) hopper, KEYS.LASTWIPED, PersistentDataType.LONG) == null)
+            PDCUtils.setNbt(main, (PersistentDataHolder) hopper, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
     }
 
 }

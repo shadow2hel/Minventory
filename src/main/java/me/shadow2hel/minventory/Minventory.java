@@ -32,12 +32,13 @@ public class Minventory extends JavaPlugin {
 
     private void initializeListeners(IPlayerInventoryManager playerInventoryManager,
                                      IEntityManager mobManager, IPlayerManager playerManager, Wiper wiper) {
-        getServer().getPluginManager().registerEvents(new InventoryEventListener(playerInventoryManager, mobManager), this);
+        getServer().getPluginManager().registerEvents(new InventoryEventListener(this, playerInventoryManager, mobManager), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(playerInventoryManager, mobManager, this), this);
-        getServer().getPluginManager().registerEvents(new MobPickupListener(mobManager, playerManager), this);
-        getServer().getPluginManager().registerEvents(new MobPortalListener(this, mobManager, wiper), this);
+        getServer().getPluginManager().registerEvents(new MobPickupListener(this, mobManager, playerManager), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(playerManager, wiper), this);
         getServer().getPluginManager().registerEvents(new PlayerShulkerListener(playerManager), this);
+        getServer().getPluginManager().registerEvents(new ChunkListener(wiper), this);
+        getServer().getPluginManager().registerEvents(new ItemDropListener(this), this);
 
     }
 
