@@ -58,7 +58,6 @@ public class ItemDropListener implements Listener {
                 Calendar cal = Calendar.getInstance();
                 if (PDCUtils.getNbt(main, item, KEYS.LASTWIPED, PersistentDataType.LONG) == null) {
                     PDCUtils.setNbt(main, item, KEYS.LASTWIPED, PersistentDataType.LONG, cal.getTimeInMillis());
-                    main.getLogger().info("logged dropped item: " + item.getType() + " " + cal.getTimeInMillis());
                 }
             });
         }, 1L);

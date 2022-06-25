@@ -76,7 +76,7 @@ public class Wiper {
                 } else if (currentTime.get(Calendar.MINUTE) == 59 && currentTime.get(Calendar.SECOND) == 30) {
                     wipeNotification("", Math.abs(currentTime.get(Calendar.SECOND) - 60), "seconds", 10, 200, 10);
                 } else if (currentTime.get(Calendar.MINUTE) == 59 && currentTime.get(Calendar.SECOND) >= 50) {
-                    wipeNotification("" + (60 - currentTime.get(Calendar.SECOND)), currentTime.get(Calendar.SECOND), "", 5, 20, 5);
+                    wipeNotification("" + (60 - currentTime.get(Calendar.SECOND)), (60 - currentTime.get(Calendar.SECOND)), "", 5, 20, 5);
                 }
             } else if (currentTime.get(Calendar.HOUR_OF_DAY) == 0 && currentTime.get(Calendar.MINUTE) == 0 && currentTime.get(Calendar.SECOND) == 0) {
                 task.cancel();
@@ -111,6 +111,13 @@ public class Wiper {
         isWiping = true;
         main.getServer().getOnlinePlayers().forEach(player -> player.kickPlayer(MESSAGES.PLAYERJOINWIPE));
         wipe();
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendTitle(ChatColor.BOLD + "" + ChatColor.DARK_GREEN + "Wiped!",
+                    ChatColor.GOLD + "Spread your wealth",
+                    5,
+                    200,
+                    5);
+        });
         main.getServer().shutdown();
     }
 
@@ -142,7 +149,7 @@ public class Wiper {
                         lastInteracted.setTimeInMillis(millisLast);
                     }
                     if (lastWipe.after(lastInteracted)) {
-                        if ( entity instanceof InventoryHolder inventoryHolder) {
+                        if (entity instanceof InventoryHolder inventoryHolder) {
                             PDCUtils.setNbt(main, entity, KEYS.LASTWIPED, PersistentDataType.LONG, currentTime.getTimeInMillis());
                             if (inventoryHolder instanceof ChestedHorse chestedHorse) {
                                 ItemStack saddle = chestedHorse.getInventory().getSaddle();
@@ -221,7 +228,6 @@ public class Wiper {
         PlayerTracker dataPlayer = playerManager.readPlayer(player.getUniqueId().toString());
         dataPlayer.setEnderChestWiped(true);
         playerManager.updatePlayer(dataPlayer);
-        main.getLogger().info(String.format("%s their Ender Chest has been wiped.", player.getName()));
     }
 
     public boolean isWiping() {
