@@ -4,19 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Countdown visuals done">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerShulkerListener.java" afterDir="false" />
+    <list default="true" id="ce05c44b-b3dc-47bb-8e08-0260f9720ffe" name="Changes" comment="Shulker mechanics done">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Minventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/commands/CommandMinvSchedule.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIConfirmation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIHome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIHome.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/gui/GUIScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/Wiper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/InventoryEventListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPickupListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPickupListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPortalListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPortalListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerInteractListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerInteractListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerShulkerListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/PlayerShulkerListener.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,7 +292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1656022193647</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Shulker mechanics done">
+      <created>1656103004226</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1656103004226</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -319,7 +322,8 @@
     <MESSAGE value="Wipe mechanic done, visuals are remaining" />
     <MESSAGE value="Starting gui" />
     <MESSAGE value="Countdown visuals done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Countdown visuals done" />
+    <MESSAGE value="Shulker mechanics done" />
+    <option name="LAST_COMMIT_MESSAGE" value="Shulker mechanics done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -333,11 +337,18 @@
           <line>85</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/me/shadow2hel/minventory/listeners/MobPortalListener.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="JarApplication">
         <watch expression="e.getInventory()" language="JAVA" />
+        <watch expression="dataMob.getWorld()" />
+        <watch expression="entity.getWorld().getUID().toString()" />
       </configuration>
     </watches-manager>
   </component>

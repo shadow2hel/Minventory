@@ -45,7 +45,7 @@ public class PlayerInteractListener implements Listener {
                         (int)touch.getRightClicked().getLocation().getX(),
                         (int)touch.getRightClicked().getLocation().getY(),
                         (int)touch.getRightClicked().getLocation().getZ(),
-                        touch.getRightClicked().getLocation().getWorld().getName()));
+                        touch.getRightClicked().getLocation().getWorld().getUID().toString()));
             } else {
                 touch.setCancelled(true);
             }
@@ -85,7 +85,7 @@ public class PlayerInteractListener implements Listener {
                     droppedItem.getLocation().getBlockX(),
                     droppedItem.getLocation().getBlockY(),
                     droppedItem.getLocation().getBlockZ(),
-                    droppedItem.getLocation().getWorld().getName());
+                    droppedItem.getLocation().getWorld().getUID().toString());
             entityManager.createMobWithItem(itemTracker);
         }
     }

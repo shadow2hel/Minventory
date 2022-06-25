@@ -29,7 +29,7 @@ public class PlayerShulkerListener implements Listener {
         if (entityPickupItemEvent.getEntity() instanceof Player player) {
             int amountofShulkersOnPlayer = player.getInventory().all(Material.SHULKER_BOX).size();
             PlayerTracker dataPlayer = playerManager.readPlayer(player.getUniqueId().toString());
-            if (amountofShulkersOnPlayer >= dataPlayer.getPrestige()) {
+            if (amountofShulkersOnPlayer >= dataPlayer.getPrestige() && entityPickupItemEvent.getItem().getItemStack().getType() == Material.SHULKER_BOX) {
                 entityPickupItemEvent.setCancelled(true);
             }
         }
@@ -38,10 +38,9 @@ public class PlayerShulkerListener implements Listener {
     @EventHandler
     private void onPlayerMoveInventory(InventoryClickEvent cl) {
         if (cl.getWhoClicked() instanceof Player player) {
-            Bukkit.getLogger().info(cl.getAction().toString());
             PlayerTracker dataPlayer = playerManager.readPlayer(player.getUniqueId().toString());
             int amountofShulkersonPlayer = player.getInventory().all(Material.SHULKER_BOX).size();
-            if (amountofShulkersonPlayer >= dataPlayer.getPrestige()) {
+            if (amountofShulkersonPlayer >= dataPlayer.getPrestige() && (cl.getCurrentItem() != null && cl.getCursor() != null)) {
                 if (Objects.requireNonNull(cl.getCurrentItem()).getType() == Material.SHULKER_BOX && cl.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && !Objects.equals(cl.getClickedInventory(), player.getInventory())) {
                     cl.setCancelled(true);
                 }
@@ -64,7 +63,6 @@ public class PlayerShulkerListener implements Listener {
                 int sizeContainer = drag.getView().getTopInventory().getSize() - 1;
                 boolean withInPlayerInv = false;
                 for (int slot : drag.getRawSlots()) {
-                    Bukkit.getLogger().info("" + slot);
                     if (!withInPlayerInv && slot > sizeContainer) {
                         withInPlayerInv = true;
                     }

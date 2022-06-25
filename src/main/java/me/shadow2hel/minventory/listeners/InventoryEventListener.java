@@ -57,7 +57,7 @@ public class InventoryEventListener implements Listener {
                         (int)((Vehicle) touch.getInventory().getHolder()).getLocation().getX(),
                         (int)((Vehicle) touch.getInventory().getHolder()).getLocation().getY(),
                         (int)((Vehicle) touch.getInventory().getHolder()).getLocation().getZ(),
-                        ((Vehicle) touch.getInventory().getHolder()).getLocation().getWorld().getName()));
+                        ((Vehicle) touch.getInventory().getHolder()).getLocation().getWorld().getUID().toString()));
             } else {
                 if (touch.getInventory().getType() != InventoryType.ENDER_CHEST) {
                     if (touch.getInventory().getHolder() instanceof DoubleChest doubleChest) {
@@ -70,14 +70,14 @@ public class InventoryEventListener implements Listener {
                                 left.getX(),
                                 left.getY(),
                                 left.getZ(),
-                                left.getWorld().getName());
+                                left.getWorld().getUID().toString());
                         InventoryTracker rightSide = new InventoryTracker(
                                 touch.getPlayer().getUniqueId().toString(),
                                 doubleChestInventory.getType().toString(),
                                 right.getX(),
                                 right.getY(),
                                 right.getZ(),
-                                right.getWorld().getName());
+                                right.getWorld().getUID().toString());
                         playerManager.createTouchedInventory(leftSide);
                         playerManager.createTouchedInventory(rightSide);
                     } else {
@@ -87,7 +87,7 @@ public class InventoryEventListener implements Listener {
                                 (int) touch.getInventory().getLocation().getX(),
                                 (int) touch.getInventory().getLocation().getY(),
                                 (int) touch.getInventory().getLocation().getZ(),
-                                touch.getInventory().getLocation().getWorld().getName()));
+                                touch.getInventory().getLocation().getWorld().getUID().toString()));
                     }
                 }
             }
@@ -109,7 +109,7 @@ public class InventoryEventListener implements Listener {
                     (int)sourceChest.getInventory().getLocation().getX(),
                     (int)sourceChest.getInventory().getLocation().getY(),
                     (int)sourceChest.getInventory().getLocation().getZ(),
-                    sourceChest.getInventory().getLocation().getWorld().getName());
+                    sourceChest.getInventory().getLocation().getWorld().getUID().toString());
             playerManager.createTouchedInventory(sourceContainer);
         } else if (source instanceof Vehicle sourceEntity) {
             EntityItemTracker sourceContainer = new EntityItemTracker(
@@ -119,7 +119,7 @@ public class InventoryEventListener implements Listener {
                     (int)sourceEntity.getLocation().getX(),
                     (int)sourceEntity.getLocation().getY(),
                     (int)sourceEntity.getLocation().getZ(),
-                    sourceEntity.getLocation().getWorld().getName()
+                    sourceEntity.getLocation().getWorld().getUID().toString()
             );
             mobManager.createMobWithItem(sourceContainer);
         }
@@ -131,7 +131,7 @@ public class InventoryEventListener implements Listener {
                     (int)target.getInventory().getLocation().getX(),
                     (int)target.getInventory().getLocation().getY(),
                     (int)target.getInventory().getLocation().getZ(),
-                    target.getInventory().getLocation().getWorld().getName());
+                    target.getInventory().getLocation().getWorld().getUID().toString());
             playerManager.createTouchedInventory(targetContainer);
         } else if (target instanceof Vehicle targetEntity) {
             EntityItemTracker targetContainer = new EntityItemTracker(
@@ -141,7 +141,7 @@ public class InventoryEventListener implements Listener {
                     (int)targetEntity.getLocation().getX(),
                     (int)targetEntity.getLocation().getY(),
                     (int)targetEntity.getLocation().getZ(),
-                    targetEntity.getLocation().getWorld().getName());
+                    targetEntity.getLocation().getWorld().getUID().toString());
             mobManager.createMobWithItem(targetContainer);
         }
 
@@ -152,7 +152,7 @@ public class InventoryEventListener implements Listener {
                     (int)hopper.getInventory().getLocation().getX(),
                     (int)hopper.getInventory().getLocation().getY(),
                     (int)hopper.getInventory().getLocation().getZ(),
-                    hopper.getInventory().getLocation().getWorld().getName());
+                    hopper.getInventory().getLocation().getWorld().getUID().toString());
             playerManager.createTouchedInventory(hopperContainer);
         } else if (hopper instanceof Vehicle hopperEntity) {
             EntityItemTracker hopperContainer = new EntityItemTracker(
@@ -162,7 +162,7 @@ public class InventoryEventListener implements Listener {
                     (int)hopperEntity.getLocation().getX(),
                     (int)hopperEntity.getLocation().getY(),
                     (int)hopperEntity.getLocation().getZ(),
-                    hopperEntity.getLocation().getWorld().getName());
+                    hopperEntity.getLocation().getWorld().getUID().toString());
             mobManager.createMobWithItem(hopperContainer);
         }
     }
@@ -178,7 +178,7 @@ public class InventoryEventListener implements Listener {
                     (int)hopper.getInventory().getLocation().getX(),
                     (int)hopper.getInventory().getLocation().getY(),
                     (int)hopper.getInventory().getLocation().getZ(),
-                    hopper.getInventory().getLocation().getWorld().getName());
+                    hopper.getInventory().getLocation().getWorld().getUID().toString());
             playerManager.createTouchedInventory(hopperContainer);
         } else if (hopper instanceof Vehicle hopperEntity) {
             EntityItemTracker hopperContainer = new EntityItemTracker(
@@ -188,7 +188,7 @@ public class InventoryEventListener implements Listener {
                     (int)hopperEntity.getLocation().getX(),
                     (int)hopperEntity.getLocation().getY(),
                     (int)hopperEntity.getLocation().getZ(),
-                    hopperEntity.getLocation().getWorld().getName());
+                    hopperEntity.getLocation().getWorld().getUID().toString());
             mobManager.createMobWithItem(hopperContainer);
         }
     }

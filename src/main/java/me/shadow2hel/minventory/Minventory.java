@@ -35,7 +35,7 @@ public class Minventory extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryEventListener(playerInventoryManager, mobManager), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(playerInventoryManager, mobManager, this), this);
         getServer().getPluginManager().registerEvents(new MobPickupListener(mobManager, playerManager), this);
-        getServer().getPluginManager().registerEvents(new MobPortalListener(mobManager), this);
+        getServer().getPluginManager().registerEvents(new MobPortalListener(this, mobManager, wiper), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(playerManager, wiper), this);
         getServer().getPluginManager().registerEvents(new PlayerShulkerListener(playerManager), this);
 

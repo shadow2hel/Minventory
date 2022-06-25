@@ -29,7 +29,7 @@ public class MobPickupListener implements Listener {
                     (int)pickupItemEvent.getEntity().getLocation().getX(),
                     (int)pickupItemEvent.getEntity().getLocation().getY(),
                     (int)pickupItemEvent.getEntity().getLocation().getZ(),
-                    pickupItemEvent.getEntity().getLocation().getWorld().getName()));
+                    pickupItemEvent.getEntity().getLocation().getWorld().getUID().toString()));
         }
     }
 }
